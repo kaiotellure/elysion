@@ -9,5 +9,6 @@ import (
 
 func main() {
 	http.Handle("/", templ.Handler(components.Index()))
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
 	http.ListenAndServe(":3000", nil)
 }

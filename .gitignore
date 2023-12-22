@@ -1,3 +1,6 @@
 tmp
 go.sum
 *_templ.go
+node_modules
+pnpm-lock.yaml
+assets/output.css
