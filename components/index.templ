@@ -1,27 +1,45 @@
 package components
 
 templ Header(links []string) {
-	<div class="w-screen h-11 border-b flex items-center justify-around">
-		<span class="font-thin font-serif">Nalvok</span>
+	<div class="w-screen h-20 flex items-center justify-between px-5 md:px-20">
+		<a href="/" class="font-thin font-serif text-xl">Nalvok</a>
 		<div class="flex gap-2">
 			for _, link := range links {
-				<a href={templ.SafeURL(link)} class="font-medium uppercase">{ link }</a>
+				<a href={ templ.SafeURL(link) } class="hover:font-bold uppercase">{ link }</a>
 			}
 		</div>
 	</div>
 }
 
-templ Index() {
-	<html lang="en">
+templ Home() {
+	<h1 class="text-xl font-bold">Welcome, HTMX.</h1>
+}
+
+type PageProps struct {
+	Language string
+}
+
+templ Page(page templ.Component, title string, props PageProps) {
+	<html lang={ props.Language }>
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<script src="https://unpkg.com/htmx.org@1.9.9"></script>
 			<link href="/assets/output.css" rel="stylesheet"/>
-			<title>Testing HTMX</title>
+			<title>{ title }</title>
 		</head>
 		<body>
-			@Header([]string{"New Collection", "About"})
+			@Header([]string{"about"})
+			@Layout() {
+				@page
+			}
 		</body>
 	</html>
+}
+
+templ Layout() {
+	<img src="/assets/wallpaper.jpg" class="w-full h-1 object-cover"/>
+	<div class="w-full px-5 md:px-20 my-6 flex flex-col gap-3">
+		{ children... }
+	</div>
 }

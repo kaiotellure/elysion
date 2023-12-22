@@ -54,7 +54,10 @@ func main() {
 	// processing should be stopped.
 	r.Use(middleware.Timeout(60 * time.Second))
 
-	r.Get("/", TemplRender(components.Index()))
+	default_props := components.PageProps{"en-us"}
+	r.Get("/", TemplRender(components.Page(components.Home(), "Nalvok® - Home Page", default_props)))
+	r.Get("/about", TemplRender(components.Page(components.About(), "Nalvok® - About", default_props)))
+	r.NotFound(TemplRender(components.Page(components.NotFound(), "Nalvok® - Unexisting Page", default_props)))
 
 	FileServer(r, "/assets", http.Dir("./assets"))
 	http.ListenAndServe(":3000", r)
