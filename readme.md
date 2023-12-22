@@ -6,6 +6,7 @@ go install github.com/a-h/templ/cmd/templ@latest
 npm install -g pnpm
 air
 ```
+
 get tailwind vscode working
 ```json
 // settings.json

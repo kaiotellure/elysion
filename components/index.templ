@@ -1,18 +1,27 @@
 package components
 
+templ Header(links []string) {
+	<div class="w-screen h-11 border-b flex items-center justify-around">
+		<span class="font-thin font-serif">Nalvok</span>
+		<div class="flex gap-2">
+			for _, link := range links {
+				<a href={templ.SafeURL(link)} class="font-medium uppercase">{ link }</a>
+			}
+		</div>
+	</div>
+}
+
 templ Index() {
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-        <script src="https://unpkg.com/htmx.org@1.9.9"/>
-        <link href="/assets/output.css" rel="stylesheet"/>
-
-        <title>Testing HTMX</title>
-    </head>
-    <body class="w-full h-full flex items-center justify-center">
-        <span class="font-bold uppercase">Hey, welcome HTMX.</span>
-    </body>
-    </html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<script src="https://unpkg.com/htmx.org@1.9.9"></script>
+			<link href="/assets/output.css" rel="stylesheet"/>
+			<title>Testing HTMX</title>
+		</head>
+		<body>
+			@Header([]string{"New Collection", "About"})
+		</body>
+	</html>
 }
