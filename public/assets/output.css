@@ -557,10 +557,6 @@ video {
   display: table;
 }
 
-.h-1 {
-  height: 0.25rem;
-}
-
 .h-20 {
   height: 5rem;
 }
@@ -591,11 +587,6 @@ video {
 
 .gap-4 {
   gap: 1rem;
-}
-
-.object-cover {
-  -o-object-fit: cover;
-     object-fit: cover;
 }
 
 .px-5 {

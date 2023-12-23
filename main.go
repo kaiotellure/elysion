@@ -1,7 +1,11 @@
 package main
 
 import (
+	"errors"
+	"io/fs"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -11,21 +15,34 @@ import (
 )
 
 // https://github.com/go-chi/chi/blob/master/_examples/fileserver/main.go
-func FileServer(r chi.Router, path string, root http.FileSystem) {
+// adapted for not found handling
+func FileServer(router *chi.Mux, path, root string) {
+	rootfs := http.Dir(root)
+
 	if strings.ContainsAny(path, "{}*") {
 		panic("FileServer does not permit any URL parameters.")
 	}
 
 	if path != "/" && path[len(path)-1] != '/' {
-		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		router.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
 		path += "/"
 	}
 	path += "*"
 
-	r.Get(path, func(w http.ResponseWriter, r *http.Request) {
+	router.Get(path, func(w http.ResponseWriter, r *http.Request) {
 		rctx := chi.RouteContext(r.Context())
 		pathPrefix := strings.TrimSuffix(rctx.RoutePattern(), "/*")
-		fs := http.StripPrefix(pathPrefix, http.FileServer(root))
+
+		_, err := os.Stat(filepath.Join(root, r.URL.Path))
+		if errors.Is(err, fs.ErrNotExist) {
+			router.NotFoundHandler().ServeHTTP(w, r)
+			return
+		}
+
+		// 1 week
+		w.Header().Set("Cache-Control", "public, max-age=604800")
+
+		fs := http.StripPrefix(pathPrefix, http.FileServer(rootfs))
 		fs.ServeHTTP(w, r)
 	})
 }
@@ -44,7 +61,9 @@ func main() {
 	// processing should be stopped.
 	r.Use(middleware.Timeout(60 * time.Second))
 
+	FileServer(r, "/", "./public")
+	// NOTE: components and pages may overwrite files
 	components.Init(r)
-	FileServer(r, "/", http.Dir("./public"))
+
 	http.ListenAndServe(":3000", r)
 }

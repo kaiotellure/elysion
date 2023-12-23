@@ -1,14 +1,12 @@
 package components
 
-import "github.com/go-chi/chi/v5"
-import "net/http"
-import "fmt"
-
 var DEFAULT_PROPS = PageProps{"en-us"}
 
 templ Header(links []string) {
 	<div class="w-full h-20 flex items-center justify-between px-5 md:px-20">
-		<a href="/" class="font-thin font-serif text-xl">@Logo()</a>
+		<a href="/" class="font-thin font-serif text-xl">
+			@Logo()
+		</a>
 		<div class="flex items-center gap-4">
 			/* <div class="flex gap-2">
 				for _, link := range links {
@@ -30,7 +28,7 @@ templ Header(links []string) {
 	</div>
 }
 
-templ Home() {
+templ Home(cookies string) {
 	<h1 class="text-xl font-bold">Welcome, HTMX.</h1>
 }
 
@@ -57,24 +55,9 @@ templ Page(page templ.Component, title string, props PageProps) {
 }
 
 templ Layout() {
-	<img src="/assets/wallpaper.jpg" class="w-full h-1 object-cover"/>
+	<img src="/assets/blue-rainbow-line.png" class="w-full"/>
 	<div class="w-full px-5 md:px-20 my-6 flex flex-col gap-3">
 		{ children... }
 	</div>
 }
 
-func TemplRender(component templ.Component) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		err := component.Render(context.TODO(), w)
-		if err != nil {
-			fmt.Println(fmt.Errorf("Error while rendering: %w", err))
-		}
-	}
-}
-
-func Init(r chi.Router) {
-	r.Get("/", TemplRender(Page(Home(), "Nalvok® - Home Page", DEFAULT_PROPS)))
-	r.Get("/about", TemplRender(Page(About(), "Nalvok® - About", DEFAULT_PROPS)))
-	InitAccountPage(r)
-	r.NotFound(TemplRender(Page(NotFound(), "Nalvok® - Unexisting Page", DEFAULT_PROPS)))
-}
