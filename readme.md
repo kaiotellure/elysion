@@ -2,7 +2,8 @@ Go + HTMX + Templ + Tailwind
 
 ```cli
 go install github.com/cosmtrek/air@latest
-go install github.com/a-h/templ/cmd/templ@latest
+go get github.com/a-h/templ/cmd/templ@latest
+go get github.com/go-chi/chi/v5
 
 npm install -g pnpm
 cd styles
