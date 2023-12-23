@@ -1,0 +1,15 @@
+package components
+
+import "github.com/go-chi/chi/v5"
+import "net/http"
+
+templ Account(cookies string) {
+	Your cookies: { cookies }
+}
+
+func InitAccountPage(r chi.Router) {
+	r.Get("/account", func(w http.ResponseWriter, r *http.Request) {
+		cookies := r.Header.Get("user-agent")
+		Page(Account(cookies), "Nalvok® - Account", DEFAULT_PROPS).Render(context.TODO(), w)
+	})
+}

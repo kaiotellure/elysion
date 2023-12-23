@@ -1,24 +1,14 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	"net/http"
 	"strings"
 	"time"
 
-	"github.com/a-h/templ"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/ikaio/tailmplx/components"
 )
-
-func TemplRender(component templ.Component) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		err := component.Render(context.TODO(), w)
-		fmt.Errorf("Error while rendering: %w\n", err)
-	}
-}
 
 // https://github.com/go-chi/chi/blob/master/_examples/fileserver/main.go
 func FileServer(r chi.Router, path string, root http.FileSystem) {
@@ -54,11 +44,7 @@ func main() {
 	// processing should be stopped.
 	r.Use(middleware.Timeout(60 * time.Second))
 
-	default_props := components.PageProps{"en-us"}
-	r.Get("/", TemplRender(components.Page(components.Home(), "Nalvok® - Home Page", default_props)))
-	r.Get("/about", TemplRender(components.Page(components.About(), "Nalvok® - About", default_props)))
-	r.NotFound(TemplRender(components.Page(components.NotFound(), "Nalvok® - Unexisting Page", default_props)))
-
-	FileServer(r, "/assets", http.Dir("./assets"))
+	components.Init(r)
+	FileServer(r, "/", http.Dir("./public"))
 	http.ListenAndServe(":3000", r)
 }

@@ -1,12 +1,31 @@
 package components
 
+import "github.com/go-chi/chi/v5"
+import "net/http"
+import "fmt"
+
+var DEFAULT_PROPS = PageProps{"en-us"}
+
 templ Header(links []string) {
-	<div class="w-screen h-20 flex items-center justify-between px-5 md:px-20">
-		<a href="/" class="font-thin font-serif text-xl">Nalvok</a>
-		<div class="flex gap-2">
-			for _, link := range links {
-				<a href={ templ.SafeURL(link) } class="hover:font-bold uppercase">{ link }</a>
-			}
+	<div class="w-full h-20 flex items-center justify-between px-5 md:px-20">
+		<a href="/" class="font-thin font-serif text-xl">@Logo()</a>
+		<div class="flex items-center gap-4">
+			/* <div class="flex gap-2">
+				for _, link := range links {
+					<a href={ templ.SafeURL(link) } class="hover:font-bold uppercase">{ link }</a>
+				}
+			</div> */
+			<div class="flex gap-3">
+				<a href="/cart">
+					@IconShoppingBag()
+				</a>
+				<a href="/account">
+					@IconUser()
+				</a>
+				<a href="/about">
+					@IconInfo()
+				</a>
+			</div>
 		</div>
 	</div>
 }
@@ -42,4 +61,20 @@ templ Layout() {
 	<div class="w-full px-5 md:px-20 my-6 flex flex-col gap-3">
 		{ children... }
 	</div>
+}
+
+func TemplRender(component templ.Component) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		err := component.Render(context.TODO(), w)
+		if err != nil {
+			fmt.Println(fmt.Errorf("Error while rendering: %w", err))
+		}
+	}
+}
+
+func Init(r chi.Router) {
+	r.Get("/", TemplRender(Page(Home(), "Nalvok® - Home Page", DEFAULT_PROPS)))
+	r.Get("/about", TemplRender(Page(About(), "Nalvok® - About", DEFAULT_PROPS)))
+	InitAccountPage(r)
+	r.NotFound(TemplRender(Page(NotFound(), "Nalvok® - Unexisting Page", DEFAULT_PROPS)))
 }
