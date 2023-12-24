@@ -3,7 +3,7 @@ package components
 var DEFAULT_PROPS = PageProps{"en-us"}
 
 templ Header(links []string) {
-	<div class="w-full h-20 flex items-center justify-between px-5 md:px-20">
+	<div class="relative overflow-hidden w-full h-20 flex items-center justify-between px-5 md:px-20">
 		<a href="/" class="font-thin font-serif text-xl">
 			@Logo()
 		</a>
@@ -29,7 +29,24 @@ templ Header(links []string) {
 }
 
 templ Home(cookies string) {
-	<h1 class="text-xl font-bold">Welcome, HTMX.</h1>
+	<button class="flex w-full flex-wrap gap-4" type="button" hx-get="/dc/products" hx-trigger="click" hx-swap="afterbegin">
+		@Products(cookies)
+		<div class="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 duration-100 font-bold rounded">
+			+ Show More Products
+		</div>
+	</button>
+}
+
+templ Products(cookies string) {
+	for i := 0; i < 2; i++ {
+		<div class="aspect-[2/1] h-40 flex gap-2">
+			<img src="/assets/flufy-bag.jpg" class="h-full rounded"/>
+			<div class="flex flex-col text-left">
+				<h1 class="font-bold text-xl">Fluffy Bag Adidas</h1>
+				<h2 class="font-semibold text-xs">A remedy is a solution or treatment designed to alleviate or cure a problem, ailment, or difficulty. It’s something intended to correct or improve a situation, often in the context of health or well-being.</h2>
+			</div>
+		</div>
+	}
 }
 
 type PageProps struct {
@@ -41,11 +58,14 @@ templ Page(page templ.Component, title string, props PageProps) {
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 			<script src="https://unpkg.com/htmx.org@1.9.9"></script>
+			<meta name="htmx-config" content='{"includeIndicatorStyles": false}'/>
+
 			<link href="/assets/output.css" rel="stylesheet"/>
 			<title>{ title }</title>
 		</head>
-		<body>
+		<body class="dark:text-white dark:bg-zinc-900">
 			@Header([]string{"about"})
 			@Layout() {
 				@page
@@ -60,4 +80,3 @@ templ Layout() {
 		{ children... }
 	</div>
 }
-

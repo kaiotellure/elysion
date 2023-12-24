@@ -39,8 +39,8 @@ func FileServer(router *chi.Mux, path, root string) {
 			return
 		}
 
-		// 1 week
-		w.Header().Set("Cache-Control", "public, max-age=604800")
+		// Cache for public files: 604800 = 1 week
+		// w.Header().Set("Cache-Control", "public, max-age=604800")
 
 		fs := http.StripPrefix(pathPrefix, http.FileServer(rootfs))
 		fs.ServeHTTP(w, r)

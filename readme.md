@@ -1,9 +1,9 @@
 Go + HTMX + Templ + Tailwind
 
-```cli
+# Setup
+```sh
 go install github.com/cosmtrek/air@latest
-go get github.com/a-h/templ/cmd/templ@latest
-go get github.com/go-chi/chi/v5
+go get
 
 npm install -g pnpm
 cd styles
@@ -13,8 +13,9 @@ cd ..
 air
 ```
 
-get tailwind vscode working
-```json
+## TailwindCSS IntelliSense
+Getting it working by mapping it to HTML.
+```js
 // settings.json
 "tailwindCSS.includeLanguages": {
     "templ": "html"

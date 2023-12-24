@@ -3,7 +3,7 @@ package components
 templ Account(cookies string) {
 	Your cookies: { cookies }
 	<button
-		hx-get="/dynamic/test"
+		hx-get="/account"
 		hx-trigger="click"
 		hx-swap="outerHTML"
 	>
