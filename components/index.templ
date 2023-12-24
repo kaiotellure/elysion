@@ -39,7 +39,7 @@ templ Home(cookies string) {
 
 templ Products(cookies string) {
 	for i := 0; i < 2; i++ {
-		<div class="aspect-[2/1] h-40 flex gap-2">
+		<div class="aspect-[3/1] w-[48%] flex gap-2 overflow-hidden">
 			<img src="/assets/flufy-bag.jpg" class="h-full rounded"/>
 			<div class="flex flex-col text-left">
 				<h1 class="font-bold text-xl">Fluffy Bag Adidas</h1>
@@ -58,10 +58,8 @@ templ Page(page templ.Component, title string, props PageProps) {
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
 			<script src="https://unpkg.com/htmx.org@1.9.9"></script>
 			<meta name="htmx-config" content='{"includeIndicatorStyles": false}'/>
-
 			<link href="/assets/output.css" rel="stylesheet"/>
 			<title>{ title }</title>
 		</head>

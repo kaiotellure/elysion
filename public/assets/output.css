@@ -561,20 +561,20 @@ video {
   display: table;
 }
 
-.aspect-\[2\/1\] {
-  aspect-ratio: 2/1;
+.aspect-\[3\/1\] {
+  aspect-ratio: 3/1;
 }
 
 .h-20 {
   height: 5rem;
 }
 
-.h-40 {
-  height: 10rem;
-}
-
 .h-full {
   height: 100%;
+}
+
+.w-\[48\%\] {
+  width: 48%;
 }
 
 .w-full {

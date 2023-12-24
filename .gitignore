@@ -4,3 +4,4 @@ go.sum
 node_modules
 pnpm-lock.yaml
 assets/output.css
+*.db

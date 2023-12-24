@@ -12,6 +12,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/ikaio/tailmplx/components"
+	_ "github.com/ikaio/tailmplx/database"
 )
 
 // https://github.com/go-chi/chi/blob/master/_examples/fileserver/main.go
@@ -48,6 +49,7 @@ func FileServer(router *chi.Mux, path, root string) {
 }
 
 func main() {
+
 	r := chi.NewRouter()
 
 	// A good base middleware stack

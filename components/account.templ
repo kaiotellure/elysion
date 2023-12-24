@@ -1,12 +1,19 @@
 package components
 
+import "github.com/ikaio/tailmplx/database"
+import "fmt"
+
 templ Account(cookies string) {
-	Your cookies: { cookies }
-	<button
-		hx-get="/account"
-		hx-trigger="click"
-		hx-swap="outerHTML"
-	>
-		Show extension content
-	</button>
+	if list, err := database.ListCustomers(100); err == nil {
+		for _, customer := range list {
+			<div>
+				{ fmt.Sprintf("%d", customer.Sequence) }: {customer.Snowflake}
+			</div>
+		}
+		if len(list) == 0 {
+			No customer found
+		}
+	} else {
+		Error trying get customers list
+	}
 }
