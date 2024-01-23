@@ -1,8 +1,0 @@
-{
-  "scripts": {
-    "build": "tailwindcss -i ./input.css -o ../public/assets/output.css"
-  },
-  "devDependencies": {
-    "tailwindcss": "^3.4.0"
-  }
-}

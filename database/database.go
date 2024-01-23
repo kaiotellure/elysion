@@ -3,11 +3,8 @@ package database
 import (
 	"encoding/binary"
 	"encoding/json"
-	"fmt"
-	"os"
 
 	"github.com/bwmarrin/snowflake"
-	"github.com/joho/godotenv"
 	"go.etcd.io/bbolt"
 )
 
@@ -15,10 +12,10 @@ var DB *bbolt.DB
 var SnowflakeNode *snowflake.Node
 
 type Upload struct {
-	ID string
+	ID       string
 	Filename string
-	Title string
-	Author string
+	Title    string
+	Author   string
 }
 
 func (c *Upload) Save() error {
@@ -50,8 +47,7 @@ func ListUploads(limit int) (list []*Upload, err error) {
 	return
 }
 
-func init() {
-	godotenv.Overload(".env.dev", ".env.prod", ".env")
+func Setup(database_path string) {
 
 	// Setup snowflake node for id generation
 	node, err := snowflake.NewNode(1)
@@ -60,13 +56,6 @@ func init() {
 	}
 	SnowflakeNode = node
 
-	database_path, ok := os.LookupEnv("USE_DATABASE")
-	if !ok {
-		fmt.Println("[CONFIG-ERROR] USE_DATABASE not specified.")
-		os.Exit(1)
-	}
-
-	fmt.Println("[CONFIG] DATABASE:", database_path)
 	db, err := bbolt.Open(database_path, 0600, nil)
 	if err != nil {
 		panic(err)

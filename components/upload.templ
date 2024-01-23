@@ -1,55 +1,63 @@
 package components
 
-import "github.com/ikaio/tailmplx/router"
 import "net/http"
 import "os"
 import "strconv"
 import "github.com/ikaio/tailmplx/database"
 import "strings"
 import "path"
+import "github.com/ikaio/tailmplx/utilities"
+
+func HandlePost(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseMultipartForm(5 << 20)
+	if err != nil {
+		Error("Max file size is: 5mb", 400).Render(context.TODO(), w)
+		return
+	}
+
+	file, handler, err := r.FormFile("file")
+	if err != nil {
+		Error("Error while getting file: "+err.Error(), 500).Render(context.TODO(), w)
+		return
+	}
+	defer file.Close()
+
+	upload := database.Upload{
+		ID:     database.SnowflakeNode.Generate().String(),
+		Title:  r.FormValue("title"),
+		Author: r.FormValue("author"),
+	}
+	upload.Filename = upload.ID + "_" + strings.ToLower(strings.ReplaceAll(handler.Filename, " ", "-"))
+
+	upload_folder := utilities.Env("UPLOAD_FOLDER", "web/public/upload")
+	os.MkdirAll(upload_folder, os.ModePerm)
+
+	f, err := os.OpenFile(path.Join(upload_folder, upload.Filename), os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		Error("Error while creating file: "+err.Error(), 500).Render(context.TODO(), w)
+		return
+	}
+	defer f.Close()
+
+	_, err = io.Copy(f, file)
+	if err != nil {
+		Error("Error while copying your file: "+err.Error(), 500).Render(context.TODO(), w)
+		return
+	}
+
+	err = upload.Save()
+	if err != nil {
+		Error("Error while saving your upload to database: "+err.Error(), 500).Render(context.TODO(), w)
+		return
+	}
+
+	DisplayUpload(&upload).Render(context.TODO(), w)
+}
 
 func init() {
-	router.Router.Post("/i/upload", func(w http.ResponseWriter, r *http.Request) {
-		err := r.ParseMultipartForm(5 << 20)
-		if err != nil {
-			Error("Max file size is: 5mb", 400).Render(context.TODO(), w)
-			return
-		}
-
-		file, handler, err := r.FormFile("file")
-		if err != nil {
-			Error("Error while getting file: "+err.Error(), 500).Render(context.TODO(), w)
-			return
-		}
-		defer file.Close()
-
-		upload := database.Upload{
-			ID:     database.SnowflakeNode.Generate().String(),
-			Title:  r.FormValue("title"),
-			Author: r.FormValue("author"),
-		}
-		upload.Filename = upload.ID + "_" + strings.ToLower(strings.ReplaceAll(handler.Filename, " ", "-"))
-
-		f, err := os.OpenFile("public/upload/"+upload.Filename, os.O_WRONLY|os.O_CREATE, 0666)
-		if err != nil {
-			Error("Error while creating file: "+err.Error(), 500).Render(context.TODO(), w)
-			return
-		}
-		defer f.Close()
-
-		_, err = io.Copy(f, file)
-		if err != nil {
-			Error("Error while copying your file: "+err.Error(), 500).Render(context.TODO(), w)
-			return
-		}
-
-		err = upload.Save()
-		if err != nil {
-			Error("Error while saving your upload to database: "+err.Error(), 500).Render(context.TODO(), w)
-			return
-		}
-
-		DisplayUpload(&upload).Render(context.TODO(), w)
+	RegisterHandler(&LazyHandler{
+		Path:     "/i/upload",
+		Callback: HandlePost,
 	})
 }
 

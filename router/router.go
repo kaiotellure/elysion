@@ -1,18 +1,15 @@
 package router
 
 import (
-	"fmt"
-	"os"
 	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-var Router *chi.Mux
+var Router *chi.Mux = chi.NewRouter()
 
-func init() {
-	Router = chi.NewRouter()
+func Setup(public_folder_path string) {
 
 	// A good base middleware stack
 	Router.Use(middleware.RequestID)
@@ -25,8 +22,5 @@ func init() {
 	// processing should be stopped.
 	Router.Use(middleware.Timeout(60 * time.Second))
 
-	FileServer(Router, "/", "./public")
-
-	fmt.Println("[CONFIG] PORT:", os.Getenv("PORT"))
-	fmt.Println("[CONFIG] ENABLE_PUBLIC_FOLDER_CACHE:", os.Getenv("ENABLE_PUBLIC_FOLDER_CACHE"))
+	FileServer(Router, "/", public_folder_path)
 }
