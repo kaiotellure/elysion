@@ -7,5 +7,5 @@ release
 *.db
 *_templ.go
 
-public/assets/output.css
-public/upload/
+web/public/assets/output.css
+web/public/upload/
