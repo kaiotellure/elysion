@@ -1,7 +1,7 @@
 [build]
-  bin = "./tmp/main"
-  cmd = "templ generate && tailwindcss -c web/tailwind.config.js -i web/input.css -o web/public/assets/output.css && go build -o ./tmp/main"
+  bin = "./tmp/tailmplx"
+  cmd = "templ generate && go build -o ./tmp/ && tailwindcss --minify -c web/tailwind.config.js -i web/input.css -o web/public/assets/output.css"
   delay = 1000
-  exclude_dir = ["web/public", "tmp", ".git"]
+  exclude_dir = ["web", "tmp", ".git"]
   exclude_regex = [".*_templ.go"]
-  include_ext = ["go", "templ", "css"]
+  include_ext = ["go", "templ"]

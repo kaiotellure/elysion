@@ -6,3 +6,7 @@ templ NotFound(path string) {
 		Sorry, we could not find <span class="text-blue-500">{ path }</span>. Maybe it was deleted or there is a typo, please try again or <a class="text-blue-500" href="/">return to the home page.</a>
 	</div>
 }
+
+templ Error(error_code string) {
+	{ error_code }
+}

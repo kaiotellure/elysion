@@ -1,8 +1,7 @@
 tmp
 go.sum
 node_modules
-pnpm-lock.yaml
-release
+package-lock.json
 
 *.db
 *_templ.go

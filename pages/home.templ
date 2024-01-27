@@ -1,0 +1,27 @@
+package pages
+
+import "github.com/ikaio/tailmplx/models"
+import "github.com/ikaio/tailmplx/components"
+
+templ AnchorButton(href string) {
+	<a href="#" class="px-5 py-3 mt-2 rounded font-semibold border border-current transition-colors hover:underline shadow w-fit">
+		{ children... }
+	</a>
+}
+
+templ Home() {
+	<div class="w-full p-10 flex flex-col-reverse md:flex-row items-center">
+		<div class="flex flex-col">
+			<div class="flex">
+				<img src="/assets/timeline.png" class="w-10"/>
+				<h1 class="max-w-80 text-5xl">Personal Timeline Based Agenda</h1>
+			</div>
+			<h2>Nosso novo e mais moderno dispositivo feito para maxima eficiência.</h2>
+		</div>
+	</div>
+	if list, err := models.ListUploads(100); err == nil {
+		for _, upload := range list {
+			@components.DisplayUpload(upload)
+		}
+	}
+}

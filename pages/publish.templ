@@ -1,10 +1,8 @@
-package components
-
-import "net/http"
+package pages
 
 templ Publish() {
 	★ Create a new moment
-	<form class="flex flex-col gap-2" id="form" hx-encoding="multipart/form-data" hx-post="/i/upload">
+	<form class="flex flex-col gap-2" id="form" hx-encoding="multipart/form-data" hx-post="/publish">
 		<label for="title">Moment Title</label>
 		<input class="p-2 bg-white/25 rounded" name="title" type="text" placeholder="e.g: Atmospherical mysterious modern house in the forest." maxlength="100"/>
 		<label for="author">Author Identifier</label>
@@ -18,13 +16,4 @@ templ Publish() {
           htmx.find('#progress').setAttribute('value', evt.detail.loaded/evt.detail.total * 100)
         });
     </script>
-}
-
-func init() {
-	RegisterHandler(&LazyHandler{
-		Path: "/publish",
-		Callback: func(w http.ResponseWriter, r *http.Request) {
-			Page(Publish(), "Nalvok® / Publicar", DEFAULT_PROPS).Render(context.TODO(), w)
-		},
-	})
 }
