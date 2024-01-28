@@ -1,6 +1,7 @@
 package router
 
 import (
+	"context"
 	"net/http"
 	"time"
 
@@ -20,6 +21,7 @@ func Setup(public_folder_path string) {
 	Router.Use(middleware.RealIP)
 	Router.Use(middleware.Logger)
 	Router.Use(middleware.Recoverer)
+	Router.Use(SessionMiddleware)
 
 	// Set a timeout value on the request context (ctx), that will signal
 	// through ctx.Done() that the request has timed out and further
@@ -29,16 +31,23 @@ func Setup(public_folder_path string) {
 	FileServer(Router, "/", public_folder_path)
 }
 
-func getHandlerForPage(page templ.Component, title string) http.HandlerFunc {
+func getHandlerForPage(
+	page func(ctx context.Context) templ.Component,
+	title string,
+) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		pages.Page(page, title, pages.DEFAULT_PROPS).Render(r.Context(), w)
+		pages.Page(
+			page(r.Context()), title, pages.DEFAULT_PROPS,
+		).Render(r.Context(), w)
 	}
 }
 
 func SetupRoutes() {
 	// Simple Pages with single method
-	Router.Get("/", getHandlerForPage(pages.Home(), "Nalvok® / Página Inicial"))
-	
+	Router.Handle("/", &handlers.PageHandler{Title: "Home", Main: pages.Home})
+
 	// Complex Handlers with services dependencies and multiple methods
-	Router.Handle("/publish", handlers.NewFileUpload())
+	Router.Handle("/filestore/upload", handlers.NewFileUpload())
+
+	Router.NotFound((&handlers.PageHandler{Title: "Not Found", Main: pages.NotFound}).ServeHTTP)
 }

@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/ikaio/tailmplx/help"
 )
 
 // https://github.com/go-chi/chi/blob/master/_examples/fileserver/main.go
@@ -36,9 +37,13 @@ func FileServer(router *chi.Mux, path, root string) {
 			return
 		}
 
-		if os.Getenv("ENABLE_PUBLIC_FOLDER_CACHE") == "1" {
-			// 1 week
+		switch help.Env(help.MODE, "development") {
+		case "production":
+			// 1 week cache, catch weekly updates
 			w.Header().Set("Cache-Control", "public, max-age=604800")
+		case "development":
+			// allow css realtime update while developing
+			w.Header().Set("Cache-Control", "no-store")
 		}
 
 		fs := http.StripPrefix(pathPrefix, http.FileServer(rootfs))

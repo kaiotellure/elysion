@@ -2,16 +2,19 @@ package models
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/ikaio/tailmplx/database"
 	"go.etcd.io/bbolt"
 )
 
 type Upload struct {
-	ID       string
-	Filename string
-	Title    string
-	Author   string
+	ID     string
+	Title  string
+	Author string
+	At     time.Time
+
+	Files []string
 }
 
 func (c *Upload) Save() error {

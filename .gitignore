@@ -8,3 +8,5 @@ package-lock.json
 
 web/public/assets/output.css
 web/public/upload/
+
+.gitpod.yml

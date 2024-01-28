@@ -8,3 +8,15 @@ npm i -g tailwindcss
 ```
 Then run the application with code changes watch:
 `air`
+
+# Build
+```sh
+mkdir build
+mkdir build/web
+mkdir build/tmp
+rm -rf web/public/upload
+cp -r web/public build/web/public
+cp -r tmp/tailmplx build/tailmplx
+zip -r build build
+rm -rf build
+```

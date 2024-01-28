@@ -1,24 +1,42 @@
 package components
 
 import "github.com/ikaio/tailmplx/models"
+import "github.com/ikaio/tailmplx/help"
+import "fmt"
 import "path"
+import "github.com/xeonx/timeago"
+
+templ ElementByExtension(ext, src string) {
+	switch ext {
+		case ".mp3", ".wav":
+			<audio class="w-full h-full" controls>
+				<source src={ src }/>
+			</audio>
+		case ".mp4", ".avi":
+			<video controls src={ src } class="w-full h-full"></video>
+		case ".png", ".jpg", ".jpeg", ".gif", ".webp":
+			<img src={ src } class="w-full h-full object-contain"/>
+		default:
+			<a href={ templ.SafeURL(src) }>{ src }</a>
+	}
+}
 
 templ DisplayUpload(upload *models.Upload) {
-	<div class="relative flex items-center justify-center bg-white/25 w-full sm:w-[49%] lg:w-auto lg:aspect-[1.5/1] h-60">
-		switch path.Ext(upload.Filename) {
-			case ".mp3", ".wav":
-				<audio controls>
-					<source src={ "/upload/" + upload.Filename }/>
-				</audio>
-			case ".mp4", ".avi":
-				<video controls src={ "/upload/" + upload.Filename } class="w-3/4 max-h-[90%]"></video>
-			case ".png", ".jpg", ".jpeg", ".gif", ".webp":
-				<img src={ "/upload/" + upload.Filename } class="h-60 object-contain"/>
-			default:
-				Your file is here: { "/upload/"+upload.Filename }
+	<div
+		class={ help.CN(
+		"gap-1 h-40 w-full flex items-center rounded overflow-hidden shadow",
+	) }
+	>
+		for _, file := range upload.Files {
+			<div class="bg-black aspect-square sm:aspect-video h-full">
+				@ElementByExtension(path.Ext(file), "/upload/"+file)
+			</div>
 		}
-		<div class="p-2 text-lg backdrop-blur bg-black bg-opacity-50 font-medium z-10 absolute w-full bottom-0 left-0">
-			{ upload.Title } <span class="text-white/20">by</span> { upload.Author }
+		<div class="text-sm h-full w-full p-3 bg-white">
+			<span class="font-bold">{ fmt.Sprintf("@%s", upload.Author) }</span>
+			<span title={ upload.At.Format("15:04 1-2-2006") }>{ timeago.English.Format(upload.At) }</span>
+			<br/>
+			{ upload.Title }
 		</div>
 	</div>
 }

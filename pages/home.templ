@@ -1,27 +1,30 @@
 package pages
 
-import "github.com/ikaio/tailmplx/models"
-import "github.com/ikaio/tailmplx/components"
+import "time"
+import "github.com/ikaio/tailmplx/help"
+import "net/http"
 
-templ AnchorButton(href string) {
-	<a href="#" class="px-5 py-3 mt-2 rounded font-semibold border border-current transition-colors hover:underline shadow w-fit">
+templ Anchor(href string) {
+	<a
+		href={ templ.SafeURL(href) }
+		class={ help.CN(
+		"px-4 py-2 mt-2 w-fit",
+		"rounded font-semibold border border-current shadow",
+		"transition-colors hover:underline",
+	) }
+	>
 		{ children... }
 	</a>
 }
 
-templ Home() {
+templ Home(r *http.Request) {
 	<div class="w-full p-10 flex flex-col-reverse md:flex-row items-center">
 		<div class="flex flex-col">
-			<div class="flex">
-				<img src="/assets/timeline.png" class="w-10"/>
-				<h1 class="max-w-80 text-5xl">Personal Timeline Based Agenda</h1>
-			</div>
-			<h2>Nosso novo e mais moderno dispositivo feito para maxima eficiência.</h2>
+			<h1 class="font-semibold text-lg">Personal Timeline Based Agenda</h1>
+			<h2>Share, Interact and Organize</h2>
+			@Anchor("/"+r.Header.Get("session")+"/" + time.Now().Format("1-2-2006")) {
+				Open Today's Agenda
+			}
 		</div>
 	</div>
-	if list, err := models.ListUploads(100); err == nil {
-		for _, upload := range list {
-			@components.DisplayUpload(upload)
-		}
-	}
 }
