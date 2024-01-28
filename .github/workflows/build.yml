@@ -1,0 +1,35 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
+      
+      - uses: actions/checkout@v4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release
+          path: ./build
+
+      - name: Installing Dependencies
+        run: |
+          npm i -g tailwindcss
+          go mod tidy
+
+      - name: Building Binary
+        run: |
+          mkdir build
+          go build -o ./build/
+
+      - name: Bundling CSS
+        run: tailwindcss --minify -c web/tailwind.config.js -i web/input.css -o build/web/public/assets/output.css

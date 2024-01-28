@@ -1,12 +1,12 @@
 tmp
-go.sum
 node_modules
 package-lock.json
+go.sum
 
 *.db
-*_templ.go
 
 web/public/assets/output.css
 web/public/upload/
 
 .gitpod.yml
+bin
