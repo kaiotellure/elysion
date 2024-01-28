@@ -31,7 +31,7 @@ jobs:
 
       - name: Copying Necessary Files
         run: |
-          cp -r ./web/public/ ./build/web/public/
+          cp -r ./web/public/ ./build/web/
 
       - uses: actions/upload-artifact@v4
         with:
