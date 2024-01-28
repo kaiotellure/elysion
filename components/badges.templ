@@ -1,5 +1,11 @@
 package components
 
-templ Error(error_code string) {
-	{ error_code }
+templ Error(during, message string) {
+	<div class="rounded h-fit flex flex-col bg-red-300 px-4 py-2">
+		<div class="flex gap-2 items-center text-red-900 font-bold text-sm">
+			@IconServerCrash()
+			Error when { during }
+		</div>
+		<span class="font-semibold text-red-900">{ message }</span>
+	</div>
 }

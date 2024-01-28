@@ -1,12 +1,5 @@
 tmp
-node_modules
-package-lock.json
-go.sum
-
-*.db
-
 web/public/assets/output.css
 web/public/upload/
-
 .gitpod.yml
 bin

@@ -16,7 +16,7 @@ const (
 )
 
 func init() {
-	godotenv.Overload(".env.dev", ".env")
+	godotenv.Load()
 }
 
 func Env(key, fallback string) string {

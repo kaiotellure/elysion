@@ -12,9 +12,6 @@ jobs:
     steps:
       - uses: actions/setup-node@v4
       - uses: actions/setup-go@v4
-        with:
-          go-version: 1.21
-
       - uses: actions/checkout@v4
 
       - name: Installing Dependencies
@@ -22,7 +19,6 @@ jobs:
           npm i -g tailwindcss
           go mod tidy
 
-      # Running Tailwind first to create all subfolders
       - name: Bundling CSS
         run: tailwindcss --minify -c web/tailwind.config.js -i web/input.css -o build/web/public/assets/output.css
 
@@ -30,8 +26,7 @@ jobs:
         run: go build -o ./build/
 
       - name: Copying Necessary Files
-        run: |
-          cp -r ./web/public/ ./build/web/
+        run: cp -r ./web/public/ ./build/web/
 
       - uses: actions/upload-artifact@v4
         with:

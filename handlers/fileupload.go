@@ -32,10 +32,17 @@ func (h *FileUploadHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 1024
+
 func (h *FileUploadHandler) Post(w http.ResponseWriter, r *http.Request) {
 
-	if err := r.ParseMultipartForm(5 << 20); err != nil {
-		components.Error("file-too-big").Render(r.Context(), w)
+	// limit request size
+	r.Body = http.MaxBytesReader(w, r.Body, MAX_UPLOAD_SIZE)
+	// store a quarter on the memory, rest on disk
+	err := r.ParseMultipartForm(MAX_UPLOAD_SIZE / 4)
+
+	if err != nil {
+		components.Error("parsing-form", err.Error()).Render(r.Context(), w)
 		return
 	}
 
@@ -74,14 +81,14 @@ func (h *FileUploadHandler) Post(w http.ResponseWriter, r *http.Request) {
 
 		// Copying
 		if _, err = io.Copy(outfile, file); err != nil {
-			components.Error("copying-file").Render(r.Context(), w)
+			components.Error("copying-file", err.Error()).Render(r.Context(), w)
 			return
 		}
 	}
 
 	// Saving upload metadata
 	if err := upload.Save(); err != nil {
-		components.Error("saving-upload").Render(r.Context(), w)
+		components.Error("saving-upload", err.Error()).Render(r.Context(), w)
 		return
 	}
 

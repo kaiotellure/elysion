@@ -14,7 +14,7 @@ func main() {
 	router.Setup(help.Env(help.PUBLIC_FOLDER, "web/public"))
 	router.SetupRoutes()
 
-	address := ":"+help.Env(help.PORT, "3000")
+	address := ":" + help.Env(help.PORT, "3000")
 	if err := http.ListenAndServe(address, router.Router); err != nil {
 		panic(err)
 	}

@@ -13,7 +13,7 @@ templ ElementByExtension(ext, src string) {
 				<source src={ src }/>
 			</audio>
 		case ".mp4", ".avi":
-			<video controls src={ src } class="w-full h-full"></video>
+			<video preload="metadata" controls src={ src } class="w-full h-full"></video>
 		case ".png", ".jpg", ".jpeg", ".gif", ".webp":
 			<img src={ src } class="w-full h-full object-contain"/>
 		default:
@@ -27,16 +27,25 @@ templ DisplayUpload(upload *models.Upload) {
 		"gap-1 h-40 w-full flex items-center rounded overflow-hidden shadow",
 	) }
 	>
-		for _, file := range upload.Files {
-			<div class="bg-black aspect-square sm:aspect-video h-full">
-				@ElementByExtension(path.Ext(file), "/upload/"+file)
-			</div>
-		}
+		<div class="bg-violet-800 text-white aspect-square sm:aspect-video h-full">
+			@ElementByExtension(path.Ext(upload.Files[0]), "/upload/"+upload.Files[0])
+		</div>
 		<div class="text-sm h-full w-full p-3 bg-white">
 			<span class="font-bold">{ fmt.Sprintf("@%s", upload.Author) }</span>
 			<span title={ upload.At.Format("15:04 1-2-2006") }>{ timeago.English.Format(upload.At) }</span>
 			<br/>
 			{ upload.Title }
+			if len(upload.Files[1:]) != 0 {
+				<br/>
+				<br/>
+				<span class="font-semibold text-xs">Other files</span>
+				<br/>
+				<div class="flex flex-wrap gap-1">
+					for _, file := range upload.Files[1:] {
+						<a class="bg-violet-100 p-1 text-violet-800" href={ templ.SafeURL("/upload/" + file) }>...{ file[len(file)-22:] }</a>
+					}
+				</div>
+			}
 		</div>
 	</div>
 }
