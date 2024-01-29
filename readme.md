@@ -12,4 +12,15 @@ Then run the application with: `air`
 - Linux: Find process: `ps -A | grep tailmplx`
 - Linux: Run process on background: `nohup ./tailmplx &`
 
-Download lastest build: [Nightly Link](https://nightly.link/ikaio/tailmplx/workflows/build/main/release)
+Download lastest build: [Nightly Link](https://nightly.link/ikaio/tailmplx/workflows/build/main/release.zip)
+
+# AWS Pull Update
+```sh
+# Backup
+cp -r nalvok nalvok-backup
+curl -L -o update.zip https://nightly.link/ikaio/tailmplx/workflows/build/main/release.zip
+unzip -o update.zip -d nalvok/
+cd nalvok
+chmod u+x tailmplx
+nohup ./tailmplx &
+```
