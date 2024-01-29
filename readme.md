@@ -9,5 +9,7 @@ npm i -g tailwindcss
 Then run the application with: `air`
 
 # Tips
-Linux: Find process: `ps -A | grep tailmplx`
-Linux: Run process on background: `nohup ./tailmplx &`
+- Linux: Find process: `ps -A | grep tailmplx`
+- Linux: Run process on background: `nohup ./tailmplx &`
+
+Download lastest build: [Nightly Link](https://nightly.link/ikaio/tailmplx/workflows/build/main/release)
