@@ -17,7 +17,7 @@ jobs:
       - name: Installing Dependencies
         run: |
           npm i -g tailwindcss
-          go mod tidy
+          go mod download
 
       - name: Bundling CSS
         run: tailwindcss --minify -c web/tailwind.config.js -i web/input.css -o build/web/public/assets/output.css
