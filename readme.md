@@ -15,8 +15,7 @@ Then run the application with: `air`
 Download lastest build: [Nightly Link](https://nightly.link/ikaio/tailmplx/workflows/build/main/release.zip)
 
 # AWS Pull Update
-```sh
-# Backup
+```bash
 cp -r nalvok nalvok-backup
 curl -L -o update.zip https://nightly.link/ikaio/tailmplx/workflows/build/main/release.zip
 unzip -o update.zip -d nalvok/

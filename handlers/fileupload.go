@@ -32,14 +32,13 @@ func (h *FileUploadHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-const MAX_UPLOAD_SIZE = 1024 * 1024 * 1024
+const MAX_UPLOAD_SIZE = (1024/10) * 1024 * 1024
 
 func (h *FileUploadHandler) Post(w http.ResponseWriter, r *http.Request) {
 
 	// limit request size
 	r.Body = http.MaxBytesReader(w, r.Body, MAX_UPLOAD_SIZE)
-	// store a quarter on the memory, rest on disk
-	err := r.ParseMultipartForm(MAX_UPLOAD_SIZE / 4)
+	err := r.ParseMultipartForm(MAX_UPLOAD_SIZE)
 
 	if err != nil {
 		components.Error("parsing-form", err.Error()).Render(r.Context(), w)
