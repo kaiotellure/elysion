@@ -1,0 +1,16 @@
+package components
+
+import "github.com/ikaio/tailmplx/help"
+
+templ FancyAnchor(href string) {
+	<a
+		class={ help.CN(
+			"group relative p-1 flex items-center gap-1 font-semibold uppercase",
+			"bg-white bg-opacity-5 rounded hover:bg-opacity-10 transition-colors",
+		) }
+		href={ templ.SafeURL(href) }
+	>
+		<img class="opacity-25 top-0 left-0 transition-[width] w-0 group-hover:w-full absolute" src="/assets/top-shine.png"/>
+		{ children... }
+	</a>
+}

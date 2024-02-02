@@ -1,15 +1,12 @@
 package router
 
 import (
-	"context"
-	"net/http"
 	"time"
 
-	"github.com/a-h/templ"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/ikaio/tailmplx/handlers"
 	"github.com/ikaio/tailmplx/pages"
+	"github.com/ikaio/tailmplx/router/handlers"
 )
 
 var Router *chi.Mux = chi.NewRouter()
@@ -29,17 +26,6 @@ func Setup(public_folder_path string) {
 	Router.Use(middleware.Timeout(60 * time.Second))
 
 	FileServer(Router, "/", public_folder_path)
-}
-
-func getHandlerForPage(
-	page func(ctx context.Context) templ.Component,
-	title string,
-) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		pages.Page(
-			page(r.Context()), title, pages.DEFAULT_PROPS,
-		).Render(r.Context(), w)
-	}
 }
 
 func SetupRoutes() {

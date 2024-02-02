@@ -3,29 +3,21 @@ package pages
 import "github.com/ikaio/tailmplx/components"
 import "github.com/ikaio/tailmplx/help"
 
-type PageProps struct {
-	Language string
-}
-
-var DEFAULT_PROPS = PageProps{"pt-br"}
-
 templ Header() {
-	<div class={help.CN(
+	<div
+		class={ help.CN(
 		"relative overflow-hidden w-full h-20 px-5 md:px-20",
-		"shadow flex items-center justify-between text-violet-800",
-	)}>
+		"shadow flex items-center justify-between",
+	) }
+	>
 		<a href="/" class="flex items-center font-thin font-serif text-xl">
-			@components.Logo() Labs
+			@components.Logo()
 		</a>
 		<div class="flex items-center gap-4">
-			<a class="flex items-center gap-1 font-semibold uppercase" href="/filestore/upload">
+			@components.FancyAnchor("/filestore/upload") {
 				@components.IconArchive()
 				<span class="hidden sm:block">file-store</span>
-			</a>
-			<a class="flex items-center gap-1 font-semibold uppercase" href="/agenda/me">
-				@components.IconTimeline()
-				<span class="hidden sm:block">timeline-agenda</span>
-			</a>
+			}
 		</div>
 	</div>
 }
@@ -37,22 +29,19 @@ templ Layout() {
 	</div>
 }
 
-templ Page(page templ.Component, title string, props PageProps) {
-	<html lang={ props.Language }>
+templ Page(page templ.Component, title string) {
+	<html lang="en-us">
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<!-- HTMX -->
 			<script src="https://unpkg.com/htmx.org@1.9.9"></script>
-			<!-- Shoelace -->
-			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/themes/light.css"/>
-			<script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/shoelace-autoloader.js"></script>
 			<!-- Google Fonts -->
 			<!-- Own -->
 			<link href="/assets/output.css" rel="stylesheet"/>
 			<title>{ title }</title>
 		</head>
-		<body class="bg-zinc-100">
+		<body class="bg-zinc-100 dark:bg-zinc-900 dark:text-zinc-200">
 			@Layout() {
 				@page
 			}

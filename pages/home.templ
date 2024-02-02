@@ -1,28 +1,15 @@
 package pages
 
 import "time"
-import "github.com/ikaio/tailmplx/help"
 import "net/http"
-
-templ Anchor(href string) {
-	<a
-		href={ templ.SafeURL(href) }
-		class={ help.CN(
-		"px-4 py-2 mt-2 w-fit",
-		"rounded font-semibold border border-current shadow",
-		"transition-colors hover:underline",
-	) }
-	>
-		{ children... }
-	</a>
-}
+import "github.com/ikaio/tailmplx/components"
 
 templ Home(r *http.Request) {
-	<div class="w-full p-10 flex flex-col-reverse md:flex-row items-center">
+	<div class="w-full flex flex-col-reverse md:flex-row items-center">
 		<div class="flex flex-col">
 			<h1 class="font-semibold text-lg">Personal Timeline Based Agenda</h1>
 			<h2>Share, Interact and Organize</h2>
-			@Anchor("/"+r.Header.Get("session")+"/" + time.Now().Format("1-2-2006")) {
+			@components.FancyAnchor("/"+r.Header.Get("session")+"/" + time.Now().Format("1-2-2006")) {
 				Open Today's Agenda
 			}
 		</div>

@@ -13,7 +13,7 @@ import (
 	"github.com/ikaio/tailmplx/components"
 	"github.com/ikaio/tailmplx/database"
 	"github.com/ikaio/tailmplx/help"
-	"github.com/ikaio/tailmplx/models"
+	"github.com/ikaio/tailmplx/database/models"
 	"github.com/ikaio/tailmplx/pages"
 )
 
@@ -97,6 +97,5 @@ func (h *FileUploadHandler) Post(w http.ResponseWriter, r *http.Request) {
 func (h *FileUploadHandler) Get(w http.ResponseWriter, r *http.Request) {
 	pages.Page(
 		pages.FilestoreUpload(), "Upload to FILE-STORE",
-		pages.DEFAULT_PROPS,
 	).Render(r.Context(), w)
 }

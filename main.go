@@ -9,8 +9,7 @@ import (
 )
 
 func main() {
-	database.Setup(help.Env(help.DATABASE, "tmp/main.test.db"))
-
+	database.Setup(help.Env(help.DATABASE, "tmp/main.development.db"))
 	router.Setup(help.Env(help.PUBLIC_FOLDER, "web/public"))
 	router.SetupRoutes()
 

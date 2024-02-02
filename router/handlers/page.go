@@ -30,5 +30,5 @@ func (h *PageHandler) Post(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *PageHandler) Get(w http.ResponseWriter, r *http.Request) {
-	pages.Page(h.Main(r), h.Title, pages.DEFAULT_PROPS).Render(r.Context(), w)
+	pages.Page(h.Main(r), h.Title).Render(r.Context(), w)
 }

@@ -10,7 +10,7 @@ import "context"
 import "io"
 import "bytes"
 
-import "github.com/ikaio/tailmplx/models"
+import "github.com/ikaio/tailmplx/database/models"
 import "github.com/ikaio/tailmplx/help"
 import "fmt"
 import "path"

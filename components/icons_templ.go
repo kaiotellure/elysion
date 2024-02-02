@@ -10,7 +10,7 @@ import "context"
 import "io"
 import "bytes"
 
-func IconUser() templ.Component {
+func IconArchive() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -21,30 +21,6 @@ func IconUser() templ.Component {
 		templ_7745c5c3_Var1 := templ.GetChildren(ctx)
 		if templ_7745c5c3_Var1 == nil {
 			templ_7745c5c3_Var1 = templ.NopComponent
-		}
-		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"8\" r=\"5\"></circle><path d=\"M20 21a8 8 0 0 0-16 0\"></path></svg>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if !templ_7745c5c3_IsBuffer {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteTo(templ_7745c5c3_W)
-		}
-		return templ_7745c5c3_Err
-	})
-}
-
-func IconArchive() templ.Component {
-	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
-		if !templ_7745c5c3_IsBuffer {
-			templ_7745c5c3_Buffer = templ.GetBuffer()
-			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
-		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var2 == nil {
-			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-archive\"><rect width=\"20\" height=\"5\" x=\"2\" y=\"3\" rx=\"1\"></rect><path d=\"M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8\"></path><path d=\"M10 12h4\"></path></svg>")
@@ -66,9 +42,9 @@ func IconTimeline() templ.Component {
 			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var3 == nil {
-			templ_7745c5c3_Var3 = templ.NopComponent
+		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var2 == nil {
+			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-gantt-chart\"><path d=\"M8 6h10\"></path><path d=\"M6 12h9\"></path><path d=\"M11 18h7\"></path></svg>")
@@ -90,9 +66,9 @@ func IconServerCrash() templ.Component {
 			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var4 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var4 == nil {
-			templ_7745c5c3_Var4 = templ.NopComponent
+		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var3 == nil {
+			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-server-crash\"><path d=\"M6 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2\"></path><path d=\"M6 14H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2\"></path><path d=\"M6 6h.01\"></path><path d=\"M6 18h.01\"></path><path d=\"m13 6-4 6h6l-4 6\"></path></svg>")
@@ -114,12 +90,12 @@ func Logo() templ.Component {
 			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var5 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var5 == nil {
-			templ_7745c5c3_Var5 = templ.NopComponent
+		templ_7745c5c3_Var4 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var4 == nil {
+			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<svg width=\"24\" height=\"12\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.896 7.43c-1.119 1.46-2.49 3.01-4.095 3.933-2.678 1.542-6.041-.18-7.236-2.802-1.662-3.637.488-7.97 4.569-8.475 2.786-.347 5.208 2.264 6.761 4.412a.135.135 0 0 0 .105.054.128.128 0 0 0 .104-.051c1.459-1.926 3.64-4.293 6.062-4.436 1.892-.114 3.776.96 4.833 2.526 2.48 3.661.114 9.192-4.495 9.343-2.556.082-4.894-2.49-6.39-4.502-.072-.097-.145-.098-.219-.003zM7.394 4.674c.628.729 1.695 1.102 3.203 1.12.133.001.159-.05.076-.157C9.64 4.31 8.207 2.578 6.661 1.927c-.445-.187-.959-.222-1.543-.106-4.904.982-4.39 7.854.451 8.42 1.765.207 3.986-2.465 5.147-4.026.076-.1.051-.148-.074-.143-1.258.04-2.48.265-3.263 1.161-.098.113-.148.094-.148-.058l.003-2.439c0-.165.054-.186.16-.06zM17.3 7.183c-.028.187-.072.192-.132.013l-.285-.843a.494.494 0 0 0-.467-.336L13.3 6.01c-.095 0-.114.038-.058.114 1.09 1.431 3.453 4.386 5.458 4.098 4.796-.69 4.854-7.571.085-8.434-2.066-.373-4.343 2.368-5.453 3.812-.088.117-.06.18.087.188.88.05 1.799.013 2.714.019.765.005 1.14-.545 1.612-1.016.262-.261.571-.466.926-.614.264-.11.297-.06.1.148-.823.86-1.312 1.813-1.469 2.857z\" fill=\"currentColor\"></path></svg>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<svg width=\"13\" height=\"25\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7.054 2.9c-.655 0-1.31.327-1.964.982v16.836l.146 3.418c-.824.122-1.637.182-2.437.182-.387 0-.581-.206-.581-.618V4.027c0-.533-.097-.909-.291-1.127-.194-.242-.546-.364-1.055-.364-.024-.63.146-1.127.51-1.49C1.744.681 2.326.5 3.126.5c.8 0 1.37.4 1.709 1.2C5.78.9 6.75.5 7.745.5c2.4 0 3.6 1.188 3.6 3.564v16.982c0 .509.097.872.29 1.09.219.194.583.291 1.092.291 0 1.382-.776 2.073-2.328 2.073-1.284 0-1.927-.836-1.927-2.51V4.283C8.472 3.36 8 2.9 7.054 2.9z\" fill=\"currentColor\"></path></svg>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
