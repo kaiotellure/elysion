@@ -1,11 +1,12 @@
 #!/bin/bash
-available() {
-    command -v "$1" >/dev/null 2>&1
-}
 
-commit_count=$(git rev-list --all --count)
-version="0.1.$(($commit_count + 1))"
-echo "Creating $version release."
+if [ ! -e ".github/version" ]; then
+    echo ".github/version not found, run tidy.sh before releasing."
+    exit 1
+fi
+
+version=$(cat .github/version)
+echo "Releasing: v$version"
 
 mkdir release 2>/dev/null
 go build -ldflags="-X github.com/ikaio/tailmplx/help.Version=$version" -o ./release/
