@@ -12,6 +12,7 @@ Download lastest build: [Nightly Link](https://nightly.link/ikaio/tailmplx/workf
 
 > [!IMPORTANT]
 > This script is just what I'm currently using for my personal deployment, this is not by any form an enforced action, and it's highly recommended that you devote the time needed to research the best deployment strategy for the size of your application and its scalability plans.
+
 ```bash
 # Backup your current version
 cp -r nalvok nalvok-backup
@@ -26,5 +27,5 @@ chmod u+x tailmplx
 # Kill old running version
 pkill tailmplx
 # Run new version on background
-nohup ./tailmplx &
+DATABASE=../main.production.db PUBLIC_FOLDER=./public nohup ./tailmplx &
 ```

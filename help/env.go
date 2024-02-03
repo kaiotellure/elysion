@@ -2,9 +2,13 @@ package help
 
 import (
 	"os"
+	"strconv"
+	"time"
 
 	"github.com/joho/godotenv"
 )
+
+var Version string = "indev"
 
 const (
 	MODE          = "MODE"
@@ -20,4 +24,8 @@ func init() {
 
 func Env(key, fallback string) string {
 	return OR(os.Getenv(key), fallback)
+}
+
+func CurrentYear() string {
+	return strconv.Itoa(time.Now().Year())
 }

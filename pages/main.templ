@@ -22,11 +22,33 @@ templ Header() {
 	</div>
 }
 
+templ Footer() {
+	<div
+		class={ help.CN(
+		"w-full px-5 md:px-20",
+		"flex items-center justify-between text-zinc-500 text-opacity-50",
+	) }
+	>
+		Copyright © { help.CurrentYear() } Nalvok Inc. All rights reserved. v{ help.Version }
+		<div>
+			<a class="hover:text-blue-500" href="#">Privacy Policy</a>
+			|
+			<a class="hover:text-blue-500" href="#">Terms of Use</a>
+			|
+			<a class="hover:text-blue-500" href="#">Legal</a>
+			|
+			<a class="hover:text-blue-500" href="#">Sitemap</a>
+		</div>
+		<a class="hover:text-blue-500" href="/language">English</a>
+	</div>
+}
+
 templ Layout() {
 	@Header()
 	<div class="w-full px-5 md:px-20 my-6 flex flex-col gap-3">
 		{ children... }
 	</div>
+	@Footer()
 }
 
 templ Page(page templ.Component, title string) {

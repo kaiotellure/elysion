@@ -27,7 +27,7 @@ func Home(r *http.Request) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"w-full flex flex-col-reverse md:flex-row items-center\"><div class=\"flex flex-col\"><h1 class=\"font-semibold text-lg\">Personal Timeline Based Agenda</h1><h2>Share, Interact and Organize</h2>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"w-full flex flex-col-reverse md:flex-row items-center\"><div class=\"flex flex-col\"><h1 class=\"font-semibold text-xl\">We Help Your Bussiness</h1><h2>Share, Interact and Organize</h2>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
