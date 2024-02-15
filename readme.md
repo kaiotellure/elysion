@@ -4,17 +4,11 @@
 **2.** Then run the application: `air`<br/>
 
 # Deploying
-> [!WARNING]
-> Please run `./scripts/tidy.sh` before commiting, so `.github/version` keeps track of the current version allowing `./scripts/release.sh` to perform the version linking correctly during `workflows/build.yml`.
-
 > [!TIP]
-> Download lastest build artifact produced by `workflows/build.yml`: [Nightly Link](https://nightly.link/ikaio/tailmplx/workflows/build/main/release.zip)
-
-> [!IMPORTANT]
-> This script is just what I'm currently using for my personal deployment, this is not by any form an enforced action, and it's highly recommended that you devote the time needed to research the best deployment strategy for the size of your application and its scalability plans.
+> Download lastest build artifact produced by `build.yml`: [Nightly Link](https://nightly.link/ikaio/tailmplx/workflows/build/main/release.zip)
 
 ```bash
-# Backup your current version
+# Backup current version
 cp -r nalvok nalvok-backup
 # Fetch latest build by GH Actions (-L = follow redirects)
 curl -L -o update.zip https://nightly.link/ikaio/tailmplx/workflows/build/main/release.zip

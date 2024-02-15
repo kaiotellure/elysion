@@ -14,32 +14,29 @@ templ Header() {
 			@components.Logo()
 		</a>
 		<div class="flex items-center gap-4">
-			@components.FancyAnchor("/filestore/upload") {
-				@components.IconArchive()
-				<span class="hidden sm:block">file-store</span>
+			@components.FancyAnchor("/fastfact") {
+				@components.IconBrain()
+				<span class="hidden sm:block">fast-fact</span>
 			}
 		</div>
 	</div>
 }
 
 templ Footer() {
-	<div
-		class={ help.CN(
-		"w-full px-5 md:px-20",
-		"flex items-center justify-between text-zinc-500 text-opacity-50",
-	) }
-	>
-		Copyright © { help.CurrentYear() } Nalvok Inc. All rights reserved. v{ help.Version }
-		<div>
-			<a class="hover:text-blue-500" href="#">Privacy Policy</a>
-			|
-			<a class="hover:text-blue-500" href="#">Terms of Use</a>
-			|
-			<a class="hover:text-blue-500" href="#">Legal</a>
-			|
-			<a class="hover:text-blue-500" href="#">Sitemap</a>
+	<div class="w-full gap-2 my-5 flex items-center flex-col">
+		<div class="flex gap-2 justify-center">
+			<a class="underline hover:text-emerald-500" href="#">Terms</a>
+			<a class="underline hover:text-emerald-500" href="#">Privacy</a>
+			<a class="underline hover:text-emerald-500" href="#">Sitemap</a>
 		</div>
-		<a class="hover:text-blue-500" href="/language">English</a>
+		<div class="flex gap-2 justify-center">
+			<a href="#" class="flex gap-1 items-center hover:text-emerald-500">@components.IconInstagram() Instagram</a>
+			<a href="#" class="flex gap-1 items-center hover:text-emerald-500">@components.IconTwitter() Twitter/X</a>
+		</div>
+		<span class="text-emerald-800 text-xs">
+			© { help.CurrentYear() } Nalvok, Inc.
+			v{ help.Version } m{ help.Env(help.MODE, "Development") }
+		</span>
 	</div>
 }
 
@@ -63,7 +60,7 @@ templ Page(page templ.Component, title string) {
 			<link href="/assets/output.css" rel="stylesheet"/>
 			<title>{ title }</title>
 		</head>
-		<body class="bg-zinc-100 dark:bg-zinc-900 dark:text-zinc-200">
+		<body class="bg-emerald-100 dark:bg-emerald-950 dark:text-emerald-100">
 			@Layout() {
 				@page
 			}

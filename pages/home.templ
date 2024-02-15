@@ -1,17 +1,9 @@
 package pages
 
-import "time"
 import "net/http"
-import "github.com/ikaio/tailmplx/components"
 
 templ Home(r *http.Request) {
 	<div class="w-full flex flex-col-reverse md:flex-row items-center">
-		<div class="flex flex-col">
-			<h1 class="font-semibold text-xl">We Help Your Bussiness</h1>
-			<h2>Share, Interact and Organize</h2>
-			@components.FancyAnchor("/"+r.Header.Get("session")+"/" + time.Now().Format("1-2-2006")) {
-				Open Today's Agenda
-			}
-		</div>
+		Under construction
 	</div>
 }

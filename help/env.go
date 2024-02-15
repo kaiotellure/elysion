@@ -8,7 +8,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var Version string = "indev"
+var Version string = "Indev"
 
 const (
 	MODE          = "MODE"
