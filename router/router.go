@@ -33,7 +33,7 @@ func SetupRoutes() {
 	Router.Handle("/", &handlers.PageHandler{Title: "Home", Main: pages.Home})
 
 	// Complex Handlers with services dependencies and multiple methods
-	Router.Handle("/filestore/upload", handlers.NewFileUpload())
+	Router.Handle("/apps/create", &handlers.PageHandler{Title: "Create App", Main: pages.AppsCreate})
 
 	Router.NotFound((&handlers.PageHandler{Title: "Not Found", Main: pages.NotFound}).ServeHTTP)
 }

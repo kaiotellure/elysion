@@ -1,0 +1,19 @@
+package pages
+
+import "net/http"
+
+templ AppsCreate(r *http.Request) {
+	<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css"/>
+	<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+	<input type="text" placeholder="App Name"/>
+	<div class="bg-white">
+		<textarea id="markdown-editor"></textarea>
+		@InitEditor()
+	</div>
+}
+
+script InitEditor() {
+	new EasyMDE({
+		element: document.getElementById("markdown-editor")
+	});
+}

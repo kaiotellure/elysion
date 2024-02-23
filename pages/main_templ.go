@@ -117,7 +117,7 @@ func Footer() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("Twitter/X</a></div><span class=\"text-emerald-800 text-xs\">© ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("Twitter/X</a></div><span class=\"text-emerald-600 text-xs\">© ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
