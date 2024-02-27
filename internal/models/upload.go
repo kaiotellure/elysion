@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/ikaio/tailmplx/database"
+	"github.com/ikaio/tailmplx/internal/database"
 	"go.etcd.io/bbolt"
 )
 

@@ -3,7 +3,7 @@ package router
 import (
 	"net/http"
 
-	"github.com/ikaio/tailmplx/database"
+	"github.com/ikaio/tailmplx/internal/database"
 )
 
 func SessionMiddleware(next http.Handler) http.Handler {

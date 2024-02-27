@@ -3,9 +3,9 @@ package main
 import (
 	"net/http"
 
-	"github.com/ikaio/tailmplx/database"
-	"github.com/ikaio/tailmplx/help"
-	"github.com/ikaio/tailmplx/router"
+	"github.com/ikaio/tailmplx/internal/database"
+	"github.com/ikaio/tailmplx/internal/help"
+	"github.com/ikaio/tailmplx/internal/router"
 )
 
 func main() {

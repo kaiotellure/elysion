@@ -19,8 +19,17 @@ jobs:
           npm i -g tailwindcss
           go mod download
 
-      - name: Running Release Script
-        run: ./scripts/release.sh
+      - name: Create Release Directory
+        run: mkdir release 2>/dev/null
+
+      - name: Build Binary
+        run: go build -o ./release/
+
+      - name: Copy Public Directory
+        run: cp -r web/public release
+
+      - name: Generate Tailwind Output CSS
+        run: tailwindcss --minify -c tailwind.config.js -i web/input.css -o release/public/assets/output.css
 
       - uses: actions/upload-artifact@v4
         with:

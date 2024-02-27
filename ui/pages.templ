@@ -1,0 +1,143 @@
+package ui
+
+import "net/http"
+import "encoding/json"
+import "fmt"
+
+templ NotFound(r *http.Request) {
+	<div class="max-w-[750px] flex flex-col gap-2">
+		<h1 class="font-bold text-2xl">404: { r.URL.Path }</h1>
+		Sorry, we could not find the page you were looking for, it may have been deleted or there is a typo.
+		<div class="flex items-center gap-2">
+			@B("/") {
+				@IconUndo()
+				return home
+			}
+			@B("/report") {
+				@IconBug()
+				report an issue
+			}
+		</div>
+	</div>
+}
+
+templ Home(r *http.Request) {
+	<div class="p-5 w-full min-h-40 flex rounded bg-pink-500">
+		<span class="text-neutral-900 text-lg font-bold">
+			Presenting: iMac Pro
+		</span>
+	</div>
+}
+
+type MovieImagesExtra struct {
+	Url string `json:"url"`
+}
+
+type MovieImages struct {
+	Cover  string              `json:"cover"`
+	Banner string              `json:"banner"`
+	Extras []*MovieImagesExtra `json:"extras"`
+}
+
+type MovieLink struct {
+	Name   string `json:"name"`
+	Magnet string `json:"magnet"`
+}
+
+type Movie struct {
+	Title       string       `json:"title"`
+	Description string       `json:"description"`
+	Images      *MovieImages `json:"images"`
+	Links       []*MovieLink `json:"links"`
+}
+
+func getMovie() string {
+	movie := Movie{
+		"Career Opportunities",
+		"Example description...",
+		&MovieImages{
+			"https://1.bp.blogspot.com/-tPu459S4-iU/WqBd01xoXsI/AAAAAAAAJSA/m7yZWIXNQgsm5WsAAzWQKRm9tPy1hi_PgCLcBGAs/s1600/Construindo%2Buma%2BCarreira%2Btorrent%2Bdownload%2Bdublado%2Bbluray.jpg",
+			"https://e1.pxfuel.com/desktop-wallpaper/616/921/desktop-wallpaper-jennifer-connelly-career-opportunities.jpg",
+			[]*MovieImagesExtra{},
+		},
+		[]*MovieLink{
+			{"Dual Áudio 720p", "magnet:?xt=urn:btih:4300F3865E8C8357B48A549D6C21F4B8ECD0E885&dn=Construindo+Uma+Carreira+%5B1991%5D+rmz+WebDL+720p+Dual+PESADO+jefspfc+filmesmega&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce"},
+		},
+	}
+
+	b, _ := json.Marshal(movie)
+	return string(b)
+}
+
+templ input(label, model, placeholder string) {
+	<div class="text-sm flex flex-col">
+		<label class="text-zinc-600/90">{ label }</label>
+		<input class="px-2 py-1 rounded border border-zinc-500/25" x-model={ model } placeholder={ placeholder }/>
+	</div>
+}
+
+const AMBER = "bg-amber-200"
+const DANGER = "bg-red-200"
+
+templ button(onclick string, variant string) {
+	<button class={ "my-1 p-1 w-max text-sm border border-zinc-500/25 " + variant } type="button" @click={ onclick }>
+		{ children... }
+	</button>
+}
+
+templ section(name, description string) {
+	<div class="bg-zinc-500/5 border border-zinc-500/15">
+		<div @click={ fmt.Sprintf("state.show_%s = !state.show_%s", name, name) } class="p-2 flex flex-col bg-zinc-500/15">
+			<span class="capitalize text-lg">{ name }</span>
+			<span class="text-sm">{ description }</span>
+		</div>
+		<div x-show={ fmt.Sprintf("state.show_%s", name) } class="gap-2 p-2 flex flex-col">
+			{ children... }
+		</div>
+	</div>
+}
+
+templ Publish(r *http.Request) {
+	<form x-data={ fmt.Sprintf("{state:{}, data: %s}", getMovie()) } class="flex flex-col gap-2" method="post" enctype="multipart/form-data">
+		<span>Editing: <span x-text="data.title"></span></span>
+		@section("metadata", "primary informations about the title.") {
+			@input("Title (should not include props like quality)", "data.title", "e.g: Career Opportunities")
+			@input("Description (max: 500 chars)", "data.description", "tip: Say the year this title is from, featuring actors, directors, production company...")
+			@input("Genres (separeted by comma. will be trimmed)", "data.genre", "e.g: romance, comedy, classic")
+		}
+		@section("images", "helps users identify this title more easily.") {
+			<div class="flex flex-wrap gap-1">
+				<img class="h-20 aspect-[27/40] bg-red-300" x-bind:src="data.images.cover"/>
+				<img class="h-20 aspect-video bg-red-300" x-bind:src="data.images.banner"/>
+				<template x-for="extra in data.images.extras">
+					<img class="h-20 aspect-video bg-red-300" x-bind:src="extra.url"/>
+				</template>
+			</div>
+			@input("Cover Image URL", "data.images.cover", "e.g: myfile.png")
+			@input("Banner Image URL", "data.images.banner", "e.g: myfile.png")
+			@section("extras", "add moments from the title, so the user can have a sneak peak of what he's gonna get from this title.") {
+				<template x-for="extra in data.images.extras">
+					@input("Extra Image URL", "extra.url", "e.g: myfile.png")
+				</template>
+				@button("data.images.extras.push({})", AMBER) {
+					Add Extra Image
+				}
+			}
+		}
+		@section("downloads", "links users will use to download the content.") {
+			<template x-for="(link, i) in data.links">
+				<div class="p-2 bg-zinc-500/5 border border-zinc-500/10">
+					@input("Name", "link.name", "e.g: Dual Áudio: MKV 1080p")
+					@input("Magnet", "link.magnet", "e.g: magnet:aaaaa")
+					@button("data.links.splice(i, 1)", DANGER) {
+						Delete Option
+					}
+				</div>
+			</template>
+			@button("data.links.push({})", AMBER) {
+				New Download Option
+			}
+		}
+		<button @click="fetch('', {method: 'post', body: JSON.stringify($data.data)})" type="button">Publish</button>
+	</form>
+}

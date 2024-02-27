@@ -9,11 +9,9 @@ import (
 	"strings"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/ikaio/tailmplx/help"
+	"github.com/ikaio/tailmplx/internal/help"
 )
 
-// https://github.com/go-chi/chi/blob/master/_examples/fileserver/main.go
-// adapted for not found handling
 func FileServer(router *chi.Mux, path, root string) {
 	rootfs := http.Dir(root)
 
@@ -22,7 +20,7 @@ func FileServer(router *chi.Mux, path, root string) {
 	}
 
 	if path != "/" && path[len(path)-1] != '/' {
-		router.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		router.Get(path, http.RedirectHandler(path+"/", http.StatusMovedPermanently).ServeHTTP)
 		path += "/"
 	}
 	path += "*"
