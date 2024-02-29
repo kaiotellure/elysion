@@ -40,8 +40,8 @@ type MovieImages struct {
 }
 
 type MovieLink struct {
-	Name   string `json:"name"`
-	Magnet string `json:"magnet"`
+	Name string `json:"name"`
+	URL  string `json:"url"`
 }
 
 type Movie struct {
@@ -70,35 +70,36 @@ func getMovie() string {
 }
 
 templ input(label, model, placeholder string) {
-	<div class="text-sm flex flex-col">
-		<label class="text-zinc-600/90">{ label }</label>
-		<input class="px-2 py-1 rounded border border-zinc-500/25" x-model={ model } placeholder={ placeholder }/>
+	<div class="max-w-max flex flex-col">
+		<h3 class="text-xs leading-loose text-zinc-500">{ label }</h3>
+		<input class="px-2 py-1 border border-zinc-500/25 text-zinc-700 focus:text-zinc-800" x-model={ model } placeholder={ placeholder }/>
 	</div>
 }
 
-const AMBER = "bg-amber-200"
-const DANGER = "bg-red-200"
+const AMBER = "bg-amber-100 hover:bg-amber-200 border-amber-800 text-amber-800"
+const DANGER = "bg-red-100 hover:bg-red-200 border-red-800 text-red-800"
+const SAFE = "bg-emerald-100 hover:bg-emerald-200 border-emerald-800 text-emerald-800"
 
 templ button(onclick string, variant string) {
-	<button class={ "my-1 p-1 w-max text-sm border border-zinc-500/25 " + variant } type="button" @click={ onclick }>
+	<button class={ "px-2 py-1 my-2 h-max w-max text-sm font-semibold rounded border " + variant } type="button" @click={ onclick }>
 		{ children... }
 	</button>
 }
 
 templ section(name, description string) {
-	<div class="bg-zinc-500/5 border border-zinc-500/15">
-		<div @click={ fmt.Sprintf("state.show_%s = !state.show_%s", name, name) } class="p-2 flex flex-col bg-zinc-500/15">
-			<span class="capitalize text-lg">{ name }</span>
-			<span class="text-sm">{ description }</span>
+	<div class="w-full border border-zinc-500/20">
+		<div @click={ fmt.Sprintf("state.show_%s = !state.show_%s", name, name) } class="p-2 flex flex-col bg-cyan-900">
+			<span class="leading-none font-bold text-white capitalize">{ name }</span>
+			<span class="text-white text-xs">{ description }</span>
 		</div>
-		<div x-show={ fmt.Sprintf("state.show_%s", name) } class="gap-2 p-2 flex flex-col">
+		<div x-show={ fmt.Sprintf("state.show_%s", name) } class="gap-2 p-2 flex flex-wrap">
 			{ children... }
 		</div>
 	</div>
 }
 
 templ Publish(r *http.Request) {
-	<form x-data={ fmt.Sprintf("{state:{}, data: %s}", getMovie()) } class="flex flex-col gap-2" method="post" enctype="multipart/form-data">
+	<form x-data={ fmt.Sprintf("{state:{}, data: %s}", getMovie()) } x-effect="$refs.code.textContent = JSON.stringify($data.data, null, 4)" class="flex flex-col gap-2" method="post" enctype="multipart/form-data">
 		<span>Editing: <span x-text="data.title"></span></span>
 		@section("metadata", "primary informations about the title.") {
 			@input("Title (should not include props like quality)", "data.title", "e.g: Career Opportunities")
@@ -113,8 +114,10 @@ templ Publish(r *http.Request) {
 					<img class="h-20 aspect-video bg-red-300" x-bind:src="extra.url"/>
 				</template>
 			</div>
-			@input("Cover Image URL", "data.images.cover", "e.g: myfile.png")
-			@input("Banner Image URL", "data.images.banner", "e.g: myfile.png")
+			<div class="flex gap-1">
+				@input("Cover Image URL", "data.images.cover", "e.g: myfile.png")
+				@input("Banner Image URL", "data.images.banner", "e.g: myfile.png")
+			</div>
 			@section("extras", "add moments from the title, so the user can have a sneak peak of what he's gonna get from this title.") {
 				<template x-for="extra in data.images.extras">
 					@input("Extra Image URL", "extra.url", "e.g: myfile.png")
@@ -127,10 +130,10 @@ templ Publish(r *http.Request) {
 		@section("downloads", "links users will use to download the content.") {
 			<template x-for="(link, i) in data.links">
 				<div class="p-2 bg-zinc-500/5 border border-zinc-500/10">
-					@input("Name", "link.name", "e.g: Dual Áudio: MKV 1080p")
-					@input("Magnet", "link.magnet", "e.g: magnet:aaaaa")
+					@input("Option Name", "link.name", "e.g: Dual Áudio: MKV 1080p")
+					@input("Option URL", "link.url", "e.g: https://drive.google.com/? or magnet://? & etc...")
 					@button("data.links.splice(i, 1)", DANGER) {
-						Delete Option
+						Remove Option
 					}
 				</div>
 			</template>
@@ -138,6 +141,11 @@ templ Publish(r *http.Request) {
 				New Download Option
 			}
 		}
-		<button @click="fetch('', {method: 'post', body: JSON.stringify($data.data)})" type="button">Publish</button>
+		@section("Output", "compare the output JSON structure to make sure everything is behaving accordingly") {
+			<pre class="w-full overflow-auto text-xs" x-ref="code"></pre>
+		}
+		@button("fetch('', {method: 'post', body: JSON.stringify($data.data)})", SAFE) {
+			Save Changes
+		}
 	</form>
 }
