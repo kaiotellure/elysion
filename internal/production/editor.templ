@@ -1,0 +1,82 @@
+package production
+
+import "fmt"
+import "github.com/ikaio/tailmplx/internal/database"
+import "encoding/json"
+import "github.com/ikaio/tailmplx/ui/panel"
+
+func getMovie() string {
+	movie := database.Production{
+		database.SF.Generate().String(),
+		"Career Opportunities",
+		"Example description...",
+		"comedy, humor",
+		database.ProductionImages{
+			"https://1.bp.blogspot.com/-tPu459S4-iU/WqBd01xoXsI/AAAAAAAAJSA/m7yZWIXNQgsm5WsAAzWQKRm9tPy1hi_PgCLcBGAs/s1600/Construindo%2Buma%2BCarreira%2Btorrent%2Bdownload%2Bdublado%2Bbluray.jpg",
+			"https://e1.pxfuel.com/desktop-wallpaper/616/921/desktop-wallpaper-jennifer-connelly-career-opportunities.jpg",
+			[]database.ProductionImagesExtra{},
+		},
+		[]database.ProductionDownload{
+			{"Dual Áudio 720p", "magnet:?xt=urn:btih:4300F3865E8C8357B48A549D6C21F4B8ECD0E885&dn=Construindo+Uma+Carreira+%5B1991%5D+rmz+WebDL+720p+Dual+PESADO+jefspfc+filmesmega&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce"},
+		},
+		database.ProductionProperties{},
+	}
+
+	b, _ := json.Marshal(movie)
+	return string(b)
+}
+
+templ Editor() {
+	<form x-data={ fmt.Sprintf("{state:{}, data: %s}", getMovie()) } x-effect="$refs.code.textContent = JSON.stringify($data.data, null, 4)" class="flex flex-col gap-2" method="post" enctype="multipart/form-data">
+		<span>Editing: <span x-text="data.title"></span> #<span x-text="data.id"></span></span>
+		<!-- Metadata Section -->
+		@panel.Section("metadata", "primary informations about the title.") {
+			@panel.Input("Title (should not include props like quality)", "data.title", "e.g: Career Opportunities")
+			@panel.Input("Description (max: 500 chars)", "data.description", "tip: Say the year this title is from, featuring actors, directors, production company...")
+			@panel.Input("Genres (separeted by comma. will be trimmed)", "data.genres", "e.g: romance, comedy, classic")
+		}
+		<!-- Images Section -->
+		@panel.Section("images", "helps users identify this title more easily.") {
+			<div class="flex flex-wrap gap-1">
+				<img class="h-20 aspect-[27/40] bg-red-300" x-bind:src="data.images.cover"/>
+				<img class="h-20 aspect-video bg-red-300" x-bind:src="data.images.banner"/>
+				<template x-for="extra in data.images.extras">
+					<img class="h-20 aspect-video bg-red-300" x-bind:src="extra.url"/>
+				</template>
+			</div>
+			<div class="flex gap-1">
+				@panel.Input("Cover Image URL", "data.images.cover", "e.g: myfile.png")
+				@panel.Input("Banner Image URL", "data.images.banner", "e.g: myfile.png")
+			</div>
+			@panel.Section("extras", "add moments from the title, so the user can have a sneak peak of what he's gonna get from this title.") {
+				<template x-for="extra in data.images.extras">
+					@panel.Input("Extra Image URL", "extra.url", "e.g: myfile.png")
+				</template>
+				@panel.Button("data.images.extras.push({})", panel.AMBER) {
+					Add Extra Image
+				}
+			}
+		}
+		<!-- Downloads Section -->
+		@panel.Section("downloads", "links users will use to download the content.") {
+			<template x-for="(link, i) in data.links">
+				<div class="p-2 bg-zinc-500/5 border border-zinc-500/10">
+					@panel.Input("Option Name", "link.name", "e.g: Dual Áudio: MKV 1080p")
+					@panel.Input("Option URL", "link.url", "e.g: https://drive.google.com/? or magnet://? & etc...")
+					@panel.Button("data.links.splice(i, 1)", panel.DANGER) {
+						Remove Option
+					}
+				</div>
+			</template>
+			@panel.Button("data.links.push({})", panel.AMBER) {
+				New Download Option
+			}
+		}
+		@panel.Section("Output", "compare the output JSON structure to make sure everything is behaving accordingly") {
+			<pre class="w-full overflow-auto text-xs" x-ref="code"></pre>
+		}
+		@panel.Button("fetch('', {headers: {'Content-Type': 'application/json'}, method: 'put', body: JSON.stringify($data.data)})", panel.SAFE) {
+			Save Changes
+		}
+	</form>
+}

@@ -1,0 +1,8 @@
+package pages
+
+import "github.com/ikaio/tailmplx/internal/production"
+import "net/http"
+
+templ ProductionNew(r *http.Request) {
+	@production.Editor()
+}

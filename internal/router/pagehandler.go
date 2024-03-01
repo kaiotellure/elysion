@@ -9,21 +9,21 @@ import (
 
 type PageHandler struct {
 	Title string
-	Main  func(r *http.Request) templ.Component
-	Post  func(w http.ResponseWriter, r *http.Request)
+	Page  func(r *http.Request) templ.Component
+	Put   func(w http.ResponseWriter, r *http.Request)
 }
 
 func (h *PageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		h.Get(w, r)
-	case http.MethodPost:
-		h.Post(w, r)
+	case http.MethodPut:
+		h.Put(w, r)
 	default:
 		http.Error(w, "Method not implemented.", http.StatusNotImplemented)
 	}
 }
 
 func (h *PageHandler) Get(w http.ResponseWriter, r *http.Request) {
-	ui.Page(h.Main(r), h.Title).Render(r.Context(), w)
+	ui.Document(h.Page(r), h.Title).Render(r.Context(), w)
 }

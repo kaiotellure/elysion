@@ -5,7 +5,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/ikaio/tailmplx/ui"
+	"github.com/ikaio/tailmplx/internal/production"
+	"github.com/ikaio/tailmplx/pages"
 )
 
 var Router *chi.Mux = chi.NewRouter()
@@ -25,7 +26,7 @@ func Setup(public_folder_path string) {
 }
 
 func SetupRoutes() {
-	Router.Handle("/", &PageHandler{Title: "Home", Main: ui.Home})
-	Router.Handle("/publish", &PageHandler{Title: "Publish", Main: ui.ProductionEditor, Post: ui.ProductionHandlePost})
-	Router.NotFound((&PageHandler{Title: "Not Found", Main: ui.NotFound}).ServeHTTP)
+	Router.Handle("/", &PageHandler{Title: "Home", Page: pages.Home})
+	Router.Handle("/production/new", &PageHandler{Title: "New Production", Page: pages.ProductionNew, Put: production.HandlePut})
+	Router.NotFound((&PageHandler{Title: "Not Found", Page: pages.NotFound}).ServeHTTP)
 }

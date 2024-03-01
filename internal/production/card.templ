@@ -1,0 +1,20 @@
+package production
+
+import "github.com/ikaio/tailmplx/internal/database"
+import "fmt"
+import "github.com/ikaio/tailmplx/internal/help"
+
+var gradient = "$el.style.background = 'linear-gradient(to top right, %s, transparent)'"
+
+templ Card(p *database.Production) {
+	<a class="w-full sm:max-w-[200px] p-2 gap-1 flex flex-col border border-zinc-300 shadow rounded" href={ templ.URL(fmt.Sprintf("/production/%s", p.ID)) }>
+		<div class="p-2 w-full flex items-end aspect-video relative">
+			<img class="z-10 w-14 shadow-lg relative aspect-[27/40]" src={ p.Images.Cover }/>
+			<img class="top-0 left-0 w-full absolute rounded" src={ p.Images.Banner }/>
+			<div x-init={ fmt.Sprintf(gradient, p.Properties.PrimaryColor) } class="top-0 left-0 w-full h-full absolute rounded"></div>
+		</div>
+		<span class="leading-none font-medium">{ p.Title }</span>
+		<span class="leading-none text-xs">{ help.CommaList(p.Genres) }</span>
+		<span class="text-xs text-zinc-600 leading-none">{ p.Description }</span>
+	</a>
+}
