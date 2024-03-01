@@ -1,4 +1,4 @@
-package handlers
+package router
 
 import (
 	"net/http"
@@ -10,12 +10,15 @@ import (
 type PageHandler struct {
 	Title string
 	Main  func(r *http.Request) templ.Component
+	Post  func(w http.ResponseWriter, r *http.Request)
 }
 
 func (h *PageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		h.Get(w, r)
+	case http.MethodPost:
+		h.Post(w, r)
 	default:
 		http.Error(w, "Method not implemented.", http.StatusNotImplemented)
 	}

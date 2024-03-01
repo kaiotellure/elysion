@@ -17,21 +17,22 @@ func Setup(database_path string) {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	db, err := bbolt.Open(database_path, 0600, nil)
 	if err != nil {
 		panic(err)
 	}
 
+	// create buckets if they don't exists, this is expected to run only once ever
 	err = db.Update(func(tx *bbolt.Tx) error {
-		tx.CreateBucketIfNotExists([]byte("uploads"))
+		tx.CreateBucketIfNotExists([]byte("productions"))
 		return nil
 	})
-	
+
 	if err != nil {
 		panic(err)
 	}
-	
+
 	DB = db
 	SF = sf
 }
