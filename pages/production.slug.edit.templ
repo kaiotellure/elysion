@@ -1,0 +1,10 @@
+package pages
+
+import "net/http"
+import "github.com/go-chi/chi/v5"
+import "github.com/ikaio/tailmplx/internal/production"
+
+templ ProductionSlugEdit(r *http.Request) {
+	{ chi.URLParam(r, "id") }
+	@production.Editor(getSampleMovie())
+}

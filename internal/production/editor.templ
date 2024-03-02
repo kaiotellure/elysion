@@ -2,32 +2,21 @@ package production
 
 import "fmt"
 import "github.com/ikaio/tailmplx/internal/database"
-import "encoding/json"
 import "github.com/ikaio/tailmplx/ui/panel"
+import "encoding/json"
+import "github.com/ikaio/tailmplx/ui"
 
-func getMovie() string {
-	movie := database.Production{
-		database.SF.Generate().String(),
-		"Career Opportunities",
-		"Example description...",
-		"comedy, humor",
-		database.ProductionImages{
-			"https://1.bp.blogspot.com/-tPu459S4-iU/WqBd01xoXsI/AAAAAAAAJSA/m7yZWIXNQgsm5WsAAzWQKRm9tPy1hi_PgCLcBGAs/s1600/Construindo%2Buma%2BCarreira%2Btorrent%2Bdownload%2Bdublado%2Bbluray.jpg",
-			"https://e1.pxfuel.com/desktop-wallpaper/616/921/desktop-wallpaper-jennifer-connelly-career-opportunities.jpg",
-			[]database.ProductionImagesExtra{},
-		},
-		[]database.ProductionDownload{
-			{"Dual Áudio 720p", "magnet:?xt=urn:btih:4300F3865E8C8357B48A549D6C21F4B8ECD0E885&dn=Construindo+Uma+Carreira+%5B1991%5D+rmz+WebDL+720p+Dual+PESADO+jefspfc+filmesmega&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce"},
-		},
-		database.ProductionProperties{},
-	}
+const data_model = "{ data: %s, state: {}, notifications: [] }"
+const reflect = "$refs.code.textContent = JSON.stringify($data.data, null, 4)"
 
-	b, _ := json.Marshal(movie)
-	return string(b)
+func data(v any) string {
+	b, _ := json.Marshal(v)
+	return fmt.Sprintf(data_model, string(b))
 }
 
-templ Editor() {
-	<form x-data={ fmt.Sprintf("{state:{}, data: %s}", getMovie()) } x-effect="$refs.code.textContent = JSON.stringify($data.data, null, 4)" class="flex flex-col gap-2" method="post" enctype="multipart/form-data">
+templ Editor(production database.Production) {
+	<script src="/assets/helpers.js"></script>
+	<form class="flex flex-col gap-2" x-data={ data(production) } x-effect={ reflect }>
 		<span>Editing: <span x-text="data.title"></span> #<span x-text="data.id"></span></span>
 		<!-- Metadata Section -->
 		@panel.Section("metadata", "primary informations about the title.") {
@@ -59,24 +48,34 @@ templ Editor() {
 		}
 		<!-- Downloads Section -->
 		@panel.Section("downloads", "links users will use to download the content.") {
-			<template x-for="(link, i) in data.links">
+			<template x-for="(download, i) in data.downloads">
 				<div class="p-2 bg-zinc-500/5 border border-zinc-500/10">
-					@panel.Input("Option Name", "link.name", "e.g: Dual Áudio: MKV 1080p")
-					@panel.Input("Option URL", "link.url", "e.g: https://drive.google.com/? or magnet://? & etc...")
-					@panel.Button("data.links.splice(i, 1)", panel.DANGER) {
+					@panel.Input("Option Name", "download.name", "e.g: Dual Áudio: MKV 1080p")
+					@panel.Input("Option URL", "download.url", "e.g: https://drive.google.com/? or magnet://? & etc...")
+					@panel.Button("data.downloads.splice(i, 1)", panel.DANGER) {
 						Remove Option
 					}
 				</div>
 			</template>
-			@panel.Button("data.links.push({})", panel.AMBER) {
+			@panel.Button("data.downloads.push({})", panel.AMBER) {
 				New Download Option
 			}
 		}
 		@panel.Section("Output", "compare the output JSON structure to make sure everything is behaving accordingly") {
 			<pre class="w-full overflow-auto text-xs" x-ref="code"></pre>
 		}
-		@panel.Button("fetch('', {headers: {'Content-Type': 'application/json'}, method: 'put', body: JSON.stringify($data.data)})", panel.SAFE) {
+		@panel.Button("blockwhile($el, put($data))", panel.SAFE) {
 			Save Changes
 		}
+		@notifications()
 	</form>
+}
+
+templ notifications() {
+	<template x-for="notification in notifications">
+		<div class="gap-1 p-2 rounded border flex items-center" :class="notification.error ? 'text-red-800 bg-red-100 border-red-800' : 'text-emerald-800 bg-emerald-100 border-emerald-800'">
+			@ui.IconAlert()
+			<span class="font-bold" x-text="notification.message"></span>
+		</div>
+	</template>
 }

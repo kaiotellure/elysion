@@ -39,5 +39,5 @@ func HandlePut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte(production.ID + " " + primary))
+	w.Write([]byte("Production was saved successfully."))
 }

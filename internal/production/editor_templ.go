@@ -12,31 +12,19 @@ import "bytes"
 
 import "fmt"
 import "github.com/ikaio/tailmplx/internal/database"
-import "encoding/json"
 import "github.com/ikaio/tailmplx/ui/panel"
+import "encoding/json"
+import "github.com/ikaio/tailmplx/ui"
 
-func getMovie() string {
-	movie := database.Production{
-		database.SF.Generate().String(),
-		"Career Opportunities",
-		"Example description...",
-		"comedy, humor",
-		database.ProductionImages{
-			"https://1.bp.blogspot.com/-tPu459S4-iU/WqBd01xoXsI/AAAAAAAAJSA/m7yZWIXNQgsm5WsAAzWQKRm9tPy1hi_PgCLcBGAs/s1600/Construindo%2Buma%2BCarreira%2Btorrent%2Bdownload%2Bdublado%2Bbluray.jpg",
-			"https://e1.pxfuel.com/desktop-wallpaper/616/921/desktop-wallpaper-jennifer-connelly-career-opportunities.jpg",
-			[]database.ProductionImagesExtra{},
-		},
-		[]database.ProductionDownload{
-			{"Dual Áudio 720p", "magnet:?xt=urn:btih:4300F3865E8C8357B48A549D6C21F4B8ECD0E885&dn=Construindo+Uma+Carreira+%5B1991%5D+rmz+WebDL+720p+Dual+PESADO+jefspfc+filmesmega&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce"},
-		},
-		database.ProductionProperties{},
-	}
+const data_model = "{ data: %s, state: {}, notifications: [] }"
+const reflect = "$refs.code.textContent = JSON.stringify($data.data, null, 4)"
 
-	b, _ := json.Marshal(movie)
-	return string(b)
+func data(v any) string {
+	b, _ := json.Marshal(v)
+	return fmt.Sprintf(data_model, string(b))
 }
 
-func Editor() templ.Component {
+func Editor(production database.Production) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -49,15 +37,23 @@ func Editor() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form x-data=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script src=\"/assets/helpers.js\"></script><form class=\"flex flex-col gap-2\" x-data=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf("{state:{}, data: %s}", getMovie())))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(data(production)))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" x-effect=\"$refs.code.textContent = JSON.stringify($data.data, null, 4)\" class=\"flex flex-col gap-2\" method=\"post\" enctype=\"multipart/form-data\"><span>Editing: <span x-text=\"data.title\"></span> #<span x-text=\"data.id\"></span></span><!-- Metadata Section -->")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" x-effect=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(reflect))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><span>Editing: <span x-text=\"data.title\"></span> #<span x-text=\"data.id\"></span></span><!-- Metadata Section -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -187,15 +183,15 @@ func Editor() templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<template x-for=\"(link, i) in data.links\"><div class=\"p-2 bg-zinc-500/5 border border-zinc-500/10\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<template x-for=\"(download, i) in data.downloads\"><div class=\"p-2 bg-zinc-500/5 border border-zinc-500/10\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = panel.Input("Option Name", "link.name", "e.g: Dual Áudio: MKV 1080p").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = panel.Input("Option Name", "download.name", "e.g: Dual Áudio: MKV 1080p").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = panel.Input("Option URL", "link.url", "e.g: https://drive.google.com/? or magnet://? & etc...").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = panel.Input("Option URL", "download.url", "e.g: https://drive.google.com/? or magnet://? & etc...").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -214,7 +210,7 @@ func Editor() templ.Component {
 				}
 				return templ_7745c5c3_Err
 			})
-			templ_7745c5c3_Err = panel.Button("data.links.splice(i, 1)", panel.DANGER).Render(templ.WithChildren(ctx, templ_7745c5c3_Var7), templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = panel.Button("data.downloads.splice(i, 1)", panel.DANGER).Render(templ.WithChildren(ctx, templ_7745c5c3_Var7), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -237,7 +233,7 @@ func Editor() templ.Component {
 				}
 				return templ_7745c5c3_Err
 			})
-			templ_7745c5c3_Err = panel.Button("data.links.push({})", panel.AMBER).Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = panel.Button("data.downloads.push({})", panel.AMBER).Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -284,11 +280,47 @@ func Editor() templ.Component {
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = panel.Button("fetch('', {headers: {'Content-Type': 'application/json'}, method: 'put', body: JSON.stringify($data.data)})", panel.SAFE).Render(templ.WithChildren(ctx, templ_7745c5c3_Var10), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = panel.Button("blockwhile($el, put($data))", panel.SAFE).Render(templ.WithChildren(ctx, templ_7745c5c3_Var10), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = notifications().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if !templ_7745c5c3_IsBuffer {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteTo(templ_7745c5c3_W)
+		}
+		return templ_7745c5c3_Err
+	})
+}
+
+func notifications() templ.Component {
+	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
+		if !templ_7745c5c3_IsBuffer {
+			templ_7745c5c3_Buffer = templ.GetBuffer()
+			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var11 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var11 == nil {
+			templ_7745c5c3_Var11 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<template x-for=\"notification in notifications\"><div class=\"gap-1 p-2 rounded border flex items-center\" :class=\"notification.error ? &#39;text-red-800 bg-red-100 border-red-800&#39; : &#39;text-emerald-800 bg-emerald-100 border-emerald-800&#39;\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = ui.IconAlert().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<span class=\"font-bold\" x-text=\"notification.message\"></span></div></template>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
