@@ -1,0 +1,39 @@
+package production
+
+import "github.com/ikaio/tailmplx/internal/database"
+import "fmt"
+
+const embed = "https://www.youtube.com/embed/%s?si=l2UBeKVuHbzVpJpt&controls=0"
+const borderclr = "$el.style.borderColor = '%s'"
+
+css border(clr string) {
+	border-color: { clr };
+	box-shadow: { "0px 0px 10px "+clr };
+}
+
+func unsafe(text string) templ.Component {
+	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
+		_, err := io.WriteString(w, "<div class=\"unsafe\">"+text+"</div>")
+		return err
+	})
+}
+
+templ Landing(prod database.Production) {
+	<div class="relative flex overflow-hidden rounded bg-zinc-900">
+		<img class="blur opacity-25 top-0 left-0 absolute w-full object-cover rounded" src={ prod.Images.Banner }/>
+		<img class="z-10 h-60 aspect-[27/40]" src={ prod.Images.Cover }/>
+		<div class="z-10 overflow-x-auto flex items-center h-60 gap-2 p-2">
+			<iframe class={ "border rounded h-5/6 aspect-video", border(prod.Properties.PrimaryColor) } src={ fmt.Sprintf(embed, prod.Images.Trailer) } title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+			for _, extra := range prod.Images.Extras {
+				<img class={ "border rounded h-5/6 max-w-80 hover:border-white", border(prod.Properties.PrimaryColor) } src={ extra.Url }/>
+			}
+		</div>
+	</div>
+	<div class="flex flex-col mt-2">
+		<span class="font-semibold text-lg">{ prod.Title }</span>
+		<div class="mb-2 flex gap-1">
+			@Badges(strings.Split(prod.Genres, ","), prod.Properties)
+		</div>
+		@unsafe(prod.Properties.PostProcessedDescriptionHTML)
+	</div>
+}

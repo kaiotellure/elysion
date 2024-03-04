@@ -6,3 +6,10 @@ templ Input(label, model, placeholder string) {
 		<input x-model={ model } placeholder={ placeholder } class="px-2 py-1 border border-zinc-500/25 text-zinc-700 focus:text-zinc-800"/>
 	</div>
 }
+
+templ Textarea(label, model, placeholder string) {
+	<div class="max-w-max flex flex-col">
+		<h3 class="text-xs leading-loose text-zinc-500">{ label }</h3>
+		<textarea x-model={ model } placeholder={ placeholder } class="px-2 py-1 border border-zinc-500/25 text-zinc-700 focus:text-zinc-800"></textarea>
+	</div>
+}

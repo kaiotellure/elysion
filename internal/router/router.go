@@ -28,6 +28,7 @@ func Setup(public_folder_path string) {
 func SetupRoutes() {
 	Router.Handle("/", &PageHandler{Title: "Home", Page: pages.Home})
 	Router.Handle("/production/new", &PageHandler{Title: "New Production", Page: pages.ProductionNew, Put: production.HandlePut})
-	Router.Handle("/production/{id}/edit", &PageHandler{Title: "New Production", Page: pages.ProductionSlugEdit, Put: production.HandlePut})
+	Router.Handle("/production/{id}", &PageHandler{Title: "Production", Page: pages.ProductionSlug})
+	Router.Handle("/production/{id}/edit", &PageHandler{Title: "Edit Production", Page: pages.ProductionSlugEdit, Put: production.HandlePut})
 	Router.NotFound((&PageHandler{Title: "Not Found", Page: pages.NotFound}).ServeHTTP)
 }

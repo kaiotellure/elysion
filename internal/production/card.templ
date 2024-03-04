@@ -2,9 +2,20 @@ package production
 
 import "github.com/ikaio/tailmplx/internal/database"
 import "fmt"
-import "github.com/ikaio/tailmplx/internal/help"
 
 var gradient = "$el.style.background = 'linear-gradient(to top right, %s, transparent)'"
+
+css badge(props database.ProductionProperties) {
+	border-color: { props.DarkerColor };
+	color: { props.DarkerColor };
+	background: { props.LigherColor };
+}
+
+templ Badges(list []string, props database.ProductionProperties) {
+	for _, name := range list {
+		<a class={ "px-2 font-semibold border rounded", badge(props) } href={ templ.SafeURL("/genre/" + name) }>{ name }</a>
+	}
+}
 
 templ Card(p *database.Production) {
 	<a class="w-full sm:max-w-[200px] p-2 gap-1 flex flex-col border border-zinc-300 shadow rounded" href={ templ.URL(fmt.Sprintf("/production/%s", p.ID)) }>
@@ -14,7 +25,9 @@ templ Card(p *database.Production) {
 			<div x-init={ fmt.Sprintf(gradient, p.Properties.PrimaryColor) } class="top-0 left-0 w-full h-full absolute rounded"></div>
 		</div>
 		<span class="leading-none font-medium">{ p.Title }</span>
-		<span class="leading-none text-xs">{ help.CommaList(p.Genres) }</span>
+		<div class="flex gap-2">
+			@Badges(strings.Split(p.Genres, ","), p.Properties)
+		</div>
 		<span class="text-xs text-zinc-600 leading-none">{ p.Description }</span>
 	</a>
 }

@@ -2,3 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  .unsafe h1 {
+    @apply font-bold text-lg mt-2
+  }
+  .unsafe p {
+    @apply leading-tight text-sm opacity-80
+  }
+  .unsafe code {
+    @apply font-sans font-medium bg-zinc-200 px-1
+  }
+  .unsafe code::before {
+    content: '· '
+  }
+}

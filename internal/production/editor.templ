@@ -1,9 +1,9 @@
 package production
 
 import "fmt"
+import "encoding/json"
 import "github.com/ikaio/tailmplx/internal/database"
 import "github.com/ikaio/tailmplx/ui/panel"
-import "encoding/json"
 import "github.com/ikaio/tailmplx/ui"
 
 const data_model = "{ data: %s, state: {}, notifications: [] }"
@@ -18,17 +18,16 @@ templ Editor(production database.Production) {
 	<script src="/assets/helpers.js"></script>
 	<form class="flex flex-col gap-2" x-data={ data(production) } x-effect={ reflect }>
 		<span>Editing: <span x-text="data.title"></span> #<span x-text="data.id"></span></span>
-		<!-- Metadata Section -->
 		@panel.Section("metadata", "primary informations about the title.") {
 			@panel.Input("Title (should not include props like quality)", "data.title", "e.g: Career Opportunities")
-			@panel.Input("Description (max: 500 chars)", "data.description", "tip: Say the year this title is from, featuring actors, directors, production company...")
 			@panel.Input("Genres (separeted by comma. will be trimmed)", "data.genres", "e.g: romance, comedy, classic")
+			@panel.Textarea("Description (markdown syntax)", "data.description", "tip: Say the year this title is from, featuring actors, directors, production company...")
 		}
-		<!-- Images Section -->
 		@panel.Section("images", "helps users identify this title more easily.") {
-			<div class="flex flex-wrap gap-1">
-				<img class="h-20 aspect-[27/40] bg-red-300" x-bind:src="data.images.cover"/>
-				<img class="h-20 aspect-video bg-red-300" x-bind:src="data.images.banner"/>
+			<div class="h-20 flex flex-wrap gap-1">
+				<img class="h-full aspect-[27/40] bg-red-300" x-bind:src="data.images.cover"/>
+				<img class="h-full aspect-video bg-red-300" x-bind:src="data.images.banner"/>
+				<iframe class="h-full aspect-video" :src="'https://www.youtube.com/embed/'+data.images.trailer+'?si=l2UBeKVuHbzVpJpt&controls=0'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 				<template x-for="extra in data.images.extras">
 					<img class="h-20 aspect-video bg-red-300" x-bind:src="extra.url"/>
 				</template>
@@ -36,6 +35,7 @@ templ Editor(production database.Production) {
 			<div class="flex gap-1">
 				@panel.Input("Cover Image URL", "data.images.cover", "e.g: myfile.png")
 				@panel.Input("Banner Image URL", "data.images.banner", "e.g: myfile.png")
+				@panel.Input("Youtube Trailer ID", "data.images.trailer", "e.g: Hr48LXTviq8")
 			</div>
 			@panel.Section("extras", "add moments from the title, so the user can have a sneak peak of what he's gonna get from this title.") {
 				<template x-for="extra in data.images.extras">
@@ -46,7 +46,6 @@ templ Editor(production database.Production) {
 				}
 			}
 		}
-		<!-- Downloads Section -->
 		@panel.Section("downloads", "links users will use to download the content.") {
 			<template x-for="(download, i) in data.downloads">
 				<div class="p-2 bg-zinc-500/5 border border-zinc-500/10">
