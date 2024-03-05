@@ -13,7 +13,6 @@ import "bytes"
 import "net/http"
 import "github.com/go-chi/chi/v5"
 import "github.com/ikaio/tailmplx/internal/production"
-import "github.com/ikaio/tailmplx/internal/database"
 
 func ProductionSlugEdit(r *http.Request) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -28,8 +27,8 @@ func ProductionSlugEdit(r *http.Request) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		if prod, err := database.GetProduction(chi.URLParam(r, "id")); err == nil {
-			templ_7745c5c3_Err = production.Editor(prod).Render(ctx, templ_7745c5c3_Buffer)
+		if p, err := production.GetById(chi.URLParam(r, "id")); err == nil {
+			templ_7745c5c3_Err = production.Editor(*p).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

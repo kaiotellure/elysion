@@ -18,26 +18,31 @@ type ProductionImages struct {
 	Extras  []ProductionImagesExtra `json:"extras"`
 }
 
-type ProductionDownload struct {
-	Name string `json:"name"`
-	URL  string `json:"url"`
+type ProductionDownloadPostProcess struct {
+	Peers int `json:"peers"`
 }
 
-type ProductionProperties struct {
-	PrimaryColor                 string `json:"primary_color"`
-	DarkerColor                  string `json:"darker_color"`
-	LigherColor                  string `json:"ligher_color"`
-	PostProcessedDescriptionHTML string `json:"post_processed_description_html"`
+type ProductionDownload struct {
+	Name        string                        `json:"name"`
+	URL         string                        `json:"url"`
+	PostProcess ProductionDownloadPostProcess `json:"post_process"`
+}
+
+type ProductionPostProcess struct {
+	PrimaryColor    string `json:"primary_color"`
+	DarkerColor     string `json:"darker_color"`
+	LigherColor     string `json:"ligher_color"`
+	DescriptionHTML string `json:"description_html"`
 }
 
 type Production struct {
-	ID          string               `json:"id"`
-	Title       string               `json:"title"`
-	Description string               `json:"description"`
-	Genres      string               `json:"genres"`
-	Images      ProductionImages     `json:"images"`
-	Downloads   []ProductionDownload `json:"downloads"`
-	Properties  ProductionProperties `json:"properties"`
+	ID          string                `json:"id"`
+	Title       string                `json:"title"`
+	Description string                `json:"description"`
+	Genres      string                `json:"genres"`
+	Images      ProductionImages      `json:"images"`
+	Downloads   []*ProductionDownload `json:"downloads"`
+	PostProcess ProductionPostProcess `json:"post_process"`
 }
 
 func (production *Production) Save() error {
@@ -53,23 +58,26 @@ func (production *Production) Save() error {
 	})
 }
 
-func GetProduction(id string) (prod Production, err error) {
-	DB.View(func(transaction *bbolt.Tx) error {
+func FetchProduction(id string) (p *Production, err error) {
+
+	err = DB.View(func(transaction *bbolt.Tx) error {
 		bucket := transaction.Bucket([]byte("productions"))
 
 		buf := bucket.Get([]byte(id))
 		if buf == nil {
-			err = errors.New("could not get key: " + id)
-			return err
+			return errors.New("could not get key: " + id)
 		}
 
-		err = json.Unmarshal(buf, &prod)
+		var production Production
+		err := json.Unmarshal(buf, &production)
 		if err != nil {
 			return err
 		}
 
-		return err
+		p = &production
+		return nil
 	})
+
 	return
 }
 

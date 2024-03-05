@@ -21,15 +21,15 @@ func getSampleMovie() database.Production {
 		"Example description...",
 		"comedy, humor",
 		database.ProductionImages{
-			"https://www.youtube.com/watch?v=Hr48LXTviq8",
+			"Hr48LXTviq8",
 			"https://1.bp.blogspot.com/-tPu459S4-iU/WqBd01xoXsI/AAAAAAAAJSA/m7yZWIXNQgsm5WsAAzWQKRm9tPy1hi_PgCLcBGAs/s1600/Construindo%2Buma%2BCarreira%2Btorrent%2Bdownload%2Bdublado%2Bbluray.jpg",
 			"https://e1.pxfuel.com/desktop-wallpaper/616/921/desktop-wallpaper-jennifer-connelly-career-opportunities.jpg",
 			[]database.ProductionImagesExtra{},
 		},
-		[]database.ProductionDownload{
-			{"Dual Áudio 720p", "magnet:?xt=urn:btih:4300F3865E8C8357B48A549D6C21F4B8ECD0E885&dn=Construindo+Uma+Carreira+%5B1991%5D+rmz+WebDL+720p+Dual+PESADO+jefspfc+filmesmega&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce"},
+		[]*database.ProductionDownload{
+			{"Dual Áudio 720p", "magnet:?xt=urn:btih:4300F3865E8C8357B48A549D6C21F4B8ECD0E885&dn=Construindo+Uma+Carreira+%5B1991%5D+rmz+WebDL+720p+Dual+PESADO+jefspfc+filmesmega&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce", database.ProductionDownloadPostProcess{}},
 		},
-		database.ProductionProperties{},
+		database.ProductionPostProcess{},
 	}
 }
 

@@ -43,7 +43,7 @@ func HandlePut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	production.Properties.PostProcessedDescriptionHTML = string(markdownToHTML([]byte(production.Description)))
+	production.PostProcess.DescriptionHTML = string(markdownToHTML([]byte(production.Description)))
 
 	primary, err := help.GetImagePrimaryColorFromURL(production.Images.Cover)
 	if err != nil {
@@ -51,11 +51,11 @@ func HandlePut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	production.Properties.PrimaryColor = primary
+	production.PostProcess.PrimaryColor = primary
 
 	color := gamut.Hex(primary)
-	production.Properties.LigherColor = gamut.ToHex(gamut.Lighter(color, .8))
-	production.Properties.DarkerColor = gamut.ToHex(gamut.Darker(color, .4))
+	production.PostProcess.LigherColor = gamut.ToHex(gamut.Lighter(color, 1.))
+	production.PostProcess.DarkerColor = gamut.ToHex(gamut.Darker(color, .4))
 
 	err = production.Save()
 	if err != nil {

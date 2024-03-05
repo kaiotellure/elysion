@@ -4,3 +4,4 @@ web/public/upload/
 .gitpod.yml
 bin
 release
+.torrent*

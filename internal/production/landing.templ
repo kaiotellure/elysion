@@ -2,6 +2,7 @@ package production
 
 import "github.com/ikaio/tailmplx/internal/database"
 import "fmt"
+import "github.com/ikaio/tailmplx/ui"
 
 const embed = "https://www.youtube.com/embed/%s?si=l2UBeKVuHbzVpJpt&controls=0"
 const borderclr = "$el.style.borderColor = '%s'"
@@ -11,11 +12,18 @@ css border(clr string) {
 	box-shadow: { "0px 0px 10px "+clr };
 }
 
-func unsafe(text string) templ.Component {
+func markdownraw(text string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
-		_, err := io.WriteString(w, "<div class=\"unsafe\">"+text+"</div>")
+		_, err := io.WriteString(w, "<div class=\"markdown\">"+text+"</div>")
 		return err
 	})
+}
+
+func tenary(condition bool, truthy, falthy string) string {
+	if condition {
+		return truthy
+	}
+	return falthy
 }
 
 templ Landing(prod database.Production) {
@@ -23,17 +31,31 @@ templ Landing(prod database.Production) {
 		<img class="blur opacity-25 top-0 left-0 absolute w-full object-cover rounded" src={ prod.Images.Banner }/>
 		<img class="z-10 h-60 aspect-[27/40]" src={ prod.Images.Cover }/>
 		<div class="z-10 overflow-x-auto flex items-center h-60 gap-2 p-2">
-			<iframe class={ "border rounded h-5/6 aspect-video", border(prod.Properties.PrimaryColor) } src={ fmt.Sprintf(embed, prod.Images.Trailer) } title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+			<iframe class={ "border rounded h-5/6 aspect-video", border(prod.PostProcess.PrimaryColor) } src={ fmt.Sprintf(embed, prod.Images.Trailer) } title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 			for _, extra := range prod.Images.Extras {
-				<img class={ "border rounded h-5/6 max-w-80 hover:border-white", border(prod.Properties.PrimaryColor) } src={ extra.Url }/>
+				<img class={ "border rounded h-5/6 max-w-80 hover:border-white", border(prod.PostProcess.PrimaryColor) } src={ extra.Url }/>
 			}
 		</div>
 	</div>
 	<div class="flex flex-col mt-2">
 		<span class="font-semibold text-lg">{ prod.Title }</span>
 		<div class="mb-2 flex gap-1">
-			@Badges(strings.Split(prod.Genres, ","), prod.Properties)
+			@Badges(strings.Split(prod.Genres, ","), prod.PostProcess)
 		</div>
-		@unsafe(prod.Properties.PostProcessedDescriptionHTML)
+		@markdownraw(prod.PostProcess.DescriptionHTML)
+	</div>
+	<div class="mt-6 flex flex-col gap-1">
+		for i, download := range prod.Downloads {
+			<a href={ templ.SafeURL(download.URL) } class={ "p-2 gap-1 font-semibold text-sm sm:text-base flex justify-between w-full rounded border border-zinc-400", badge(prod.PostProcess), tenary(i%2 == 0, "bg-zinc-200", "bg-zinc-300") }>
+				<div class="flex items-center gap-1">
+					@ui.IconMagnet()
+					<span>{ download.Name }</span>
+				</div>
+				<div class="flex items-center gap-1">
+					@ui.IconUsers()
+					<span>{ ShowPeers(download.URL) }</span>
+				</div>
+			</a>
+		}
 	</div>
 }
