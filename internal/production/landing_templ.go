@@ -231,7 +231,7 @@ func Landing(prod database.Production) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><script src=\"https://accounts.google.com/gsi/client\" async></script><div id=\"g_id_onload\" data-login_hint data-client_id=\"581950817468-tlv862s1q1eev873rituo6m1d61ftp5i.apps.googleusercontent.com\" data-login_uri=\"http://localhost:3000/api/google\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

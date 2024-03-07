@@ -6,6 +6,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/ikaio/tailmplx/internal/production"
+	"github.com/ikaio/tailmplx/internal/services"
 	"github.com/ikaio/tailmplx/pages"
 )
 
@@ -30,5 +31,8 @@ func SetupRoutes() {
 	Router.Handle("/production/new", &PageHandler{Title: "New Production", Page: pages.ProductionNew, Put: production.HandlePut})
 	Router.Handle("/production/{id}", &PageHandler{Title: "Production", Page: pages.ProductionSlug})
 	Router.Handle("/production/{id}/edit", &PageHandler{Title: "Edit Production", Page: pages.ProductionSlugEdit, Put: production.HandlePut})
+
+	Router.Post("/api/google", services.HandleGoogleLogin)
+
 	Router.NotFound((&PageHandler{Title: "Not Found", Page: pages.NotFound}).ServeHTTP)
 }
