@@ -1,0 +1,36 @@
+package components
+
+import "github.com/ikaio/tailmplx/services/production"
+import "github.com/go-chi/chi/v5"
+import "github.com/ikaio/tailmplx/help"
+import "fmt"
+
+templ PageProductionNew(props PageProps) {
+	@ProductionEditor(production.Production{})
+}
+
+templ PageProductionSlug(props PageProps) {
+	if p, err := production.GetById(chi.URLParam(props.Request, "id")); err == nil {
+		@ProductionLanding(*p)
+	}
+}
+
+templ PageProductionSlugEdit(props PageProps) {
+	if p, err := production.GetById(chi.URLParam(props.Request, "id")); err == nil {
+		@ProductionEditor(*p)
+	}
+}
+
+const gradient = "$el.style.background = 'linear-gradient(to top right, %s, transparent)'"
+
+templ ProductionCard(p *production.Production) {
+	<a href={ templ.URL("/production/" + p.ID) } class="w-full sm:max-w-[300px] p-2 gap-1 flex flex-col border border-zinc-300 shadow rounded">
+		<div class="p-2 w-full flex items-end aspect-video relative">
+			<img class="z-10 w-14 shadow-lg relative aspect-[27/40]" src={ p.Images.Cover }/>
+			<img class="top-0 left-0 w-full absolute rounded" src={ p.Images.Banner }/>
+			<div x-init={ fmt.Sprintf(gradient, p.PostProcess.PrimaryColor) } class="top-0 left-0 w-full h-full absolute rounded"></div>
+		</div>
+		<span class="leading-none font-medium">{ p.Title }</span>
+		<span class="leading-none text-sm opacity-80">{ help.JoinAnd(p.Genres, ",", ", ", "&") }</span>
+	</a>
+}

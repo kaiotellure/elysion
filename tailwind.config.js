@@ -1,7 +1,3 @@
 module.exports = {
-    content: [
-      "internal/**/*.templ",
-      "pages/**/*.templ",
-      "ui/**/*.templ"
-    ],
+    content: ["components/**/*.templ"],
 };

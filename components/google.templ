@@ -1,0 +1,28 @@
+package components
+
+import "fmt"
+import "github.com/ikaio/tailmplx/services/google"
+
+templ GoogleError(message string) {
+	{ message }
+}
+
+templ GoogleLoginSuccess(auth *google.GoogleCredential, resume string) {
+	<div class="gap-1 flex items-center">
+		<img class="h-5 rounded-full" src={ auth.Picture }/>
+		<span class="font-bold">Welcome, { auth.Name }!</span>
+	</div>
+	@Button(resume) {
+		Return to { resume }
+	}
+}
+
+templ GoogleOneTapPrompt(resume string) {
+	<script src="https://accounts.google.com/gsi/client" async></script>
+	<div
+		id="g_id_onload"
+		data-login_hint
+		data-client_id="581950817468-tlv862s1q1eev873rituo6m1d61ftp5i.apps.googleusercontent.com"
+		data-login_uri={ fmt.Sprintf("http://localhost:3000/account/google/callback?resume=%s", resume) }
+	></div>
+}

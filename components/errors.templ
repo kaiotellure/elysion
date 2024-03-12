@@ -1,0 +1,18 @@
+package components
+
+templ NotFound(props PageProps) {
+	<div class="max-w-[750px] flex flex-col gap-2">
+		<h1 class="font-bold text-2xl">404: { props.Request.URL.Path }</h1>
+		Sorry, we could not find the page you were looking for, it may have been deleted or there is a typo.
+		<div class="flex items-center gap-2">
+			@Button("/") {
+				@IconUndo()
+				return home
+			}
+			@Button("/report") {
+				@IconBug()
+				report an issue
+			}
+		</div>
+	</div>
+}
