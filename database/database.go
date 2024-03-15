@@ -26,6 +26,8 @@ func Setup(database_path string) {
 	// create buckets if they don't exists, this is expected to run only once ever
 	err = db.Update(func(tx *bbolt.Tx) error {
 		tx.CreateBucketIfNotExists([]byte("productions"))
+		tx.CreateBucketIfNotExists([]byte("ratings"))
+		tx.CreateBucketIfNotExists([]byte("comments"))
 		return nil
 	})
 

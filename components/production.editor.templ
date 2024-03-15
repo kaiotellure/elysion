@@ -37,7 +37,10 @@ templ ProductionEditor(production production.Production) {
 				@panel.Input("Youtube Trailer ID", "data.images.trailer", "e.g: Hr48LXTviq8")
 			</div>
 			@panel.Section("extras", "add moments from the title, so the user can have a sneak peak of what he's gonna get from this title.") {
-				<template x-for="extra in data.images.extras">
+				<template
+					x-init="if (!data.images.extras) data.images.extras = []"
+					x-for="extra in data.images.extras"
+				>
 					@panel.Input("Extra Image URL", "extra.url", "e.g: myfile.png")
 				</template>
 				@panel.Button("data.images.extras.push({})", panel.AMBER) {
@@ -46,7 +49,10 @@ templ ProductionEditor(production production.Production) {
 			}
 		}
 		@panel.Section("downloads", "links users will use to download the content.") {
-			<template x-for="(download, i) in data.downloads">
+			<template
+				x-init="if (!data.downloads) data.downloads = []"
+				x-for="(download, i) in data.downloads"
+			>
 				<div class="p-2 bg-zinc-500/5 border border-zinc-500/10">
 					@panel.Input("Option Name", "download.name", "e.g: Dual Áudio: MKV 1080p")
 					@panel.Input("Option URL", "download.url", "e.g: https://drive.google.com/? or magnet://? & etc...")

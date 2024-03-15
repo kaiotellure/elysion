@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    font-family: 'Be Vietnam Pro';
+  }
+  .markdown ul {
+    @apply flex gap-1
+  }
   .markdown h1 {
     @apply font-bold text-lg mt-2
   }

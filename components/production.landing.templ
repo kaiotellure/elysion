@@ -1,15 +1,12 @@
 package components
 
 import "fmt"
+import "strconv"
+import "github.com/ikaio/tailmplx/help"
 import "github.com/ikaio/tailmplx/services/production"
+import "github.com/ikaio/tailmplx/services/google"
 
 const embed = "https://www.youtube.com/embed/%s?controls=0"
-const borderclr = "$el.style.borderColor = '%s'"
-
-css border(clr string) {
-	border-color: { clr };
-	box-shadow: { "0px 0px 10px "+clr };
-}
 
 func markdownraw(text string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
@@ -25,51 +22,78 @@ func tenary(condition bool, truthy, falthy string) string {
 	return falthy
 }
 
-css colorize(pallet production.ProductionPostProcess) {
-	border-color: { pallet.DarkerColor };
-	background: { pallet.LigherColor };
-	color: { pallet.DarkerColor };
+type ProductionRatingData struct {
+	Mine string
+	Love int
+	Like int
 }
 
-templ Badges(list []string, pallet production.ProductionPostProcess) {
-	for _, name := range list {
-		<a class={ "px-2 font-semibold border rounded", colorize(pallet) } href={ templ.SafeURL("/genre/" + strings.TrimSpace(name)) }>{ strings.TrimSpace(name) }</a>
-	}
+// state: "none" | "love" | "like" | string
+templ ProductionRating(p production.Production, rd ProductionRatingData) {
+	<div class="flex items-center gap-1">
+		@IconLoading()
+		<button
+			hx-indicator="#loader"
+			hx-swap="outerHTML"
+			hx-target="closest div"
+			hx-post={ p.ID + "/rate?type=" + tenary(rd.Mine == "love", "none", "love") }
+			class={ "gap-1 px-2 py-1 font-semibold rounded border-2 flex",
+        templ.KV("bg-zinc-200 border-zinc-800", rd.Mine == "love") }
+		>
+			if rd.Love > 0 {
+				{ strconv.Itoa(rd.Love) }
+			}
+			@IconHeart()
+		</button>
+		<button
+			hx-indicator="#loader"
+			hx-swap="outerHTML"
+			hx-target="closest div"
+			hx-post={ p.ID + "/rate?type=" + tenary(rd.Mine == "like", "none", "like") }
+			class={ "gap-1 px-2 py-1 font-semibold rounded border-2 flex",
+        templ.KV("bg-zinc-200 border-zinc-800", rd.Mine == "like") }
+		>
+			if rd.Like > 0 {
+				{ strconv.Itoa(rd.Like) }
+			}
+			@IconLike()
+		</button>
+	</div>
 }
 
-templ ProductionLanding(p production.Production) {
+templ ProductionLanding(p production.Production, c *google.GoogleCredential, rd ProductionRatingData) {
 	<div class="relative flex overflow-hidden rounded bg-zinc-900">
 		<img class="blur opacity-25 top-0 left-0 absolute w-full object-cover rounded" src={ p.Images.Banner }/>
 		<img class="z-10 h-60 aspect-[27/40]" src={ p.Images.Cover }/>
 		<div class="z-10 overflow-x-auto flex items-center h-60 gap-2 p-2">
-			<iframe class={ "border rounded h-5/6 aspect-video", border(p.PostProcess.PrimaryColor) } src={ fmt.Sprintf(embed, p.Images.Trailer) } title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+			<iframe
+				class="rounded h-full aspect-video"
+				src={ fmt.Sprintf(embed, p.Images.Trailer) }
+				title="YouTube video player"
+				frameborder="0"
+				allowfullscreen
+			></iframe>
 			for _, extra := range p.Images.Extras {
-				<img class={ "border rounded h-5/6 max-w-80 hover:border-white", border(p.PostProcess.PrimaryColor) } src={ extra.Url }/>
+				<img class={ "rounded h-full border hover:border-white", border(p.PostProcess.PrimaryColor) } src={ extra.Url }/>
 			}
 		</div>
 	</div>
 	<div class="flex flex-col mt-2">
 		<div class="flex items-center justify-between">
-			<div>
-				<span class="font-semibold text-lg">{ p.Title }</span>
-				<div class="mb-2 flex gap-1">
-					@Badges(strings.Split(p.Genres, ","), p.PostProcess)
-				</div>
+			<div class="flex flex-col">
+				<span class="font-semibold text-lg leading-none">{ p.Title }</span>
+				{ help.JoinAnd(p.Genres, ",", ", ", "&") }
 			</div>
-			<div class="flex gap-1">
-				<button class="bg-zinc-200 px-2 py-1 rounded">
-					@IconHeart()
-				</button>
-				<button class="bg-zinc-200 px-2 py-1 rounded">
-					@IconLike()
-				</button>
-			</div>
+			@ProductionRating(p, rd)
 		</div>
 		@markdownraw(p.PostProcess.DescriptionHTML)
 	</div>
 	<div class="mt-6 flex flex-col gap-1">
 		for i, download := range p.Downloads {
-			<a href={ templ.SafeURL(download.URL) } class={ "p-2 gap-1 font-semibold text-sm sm:text-base flex justify-between w-full rounded border border-zinc-400", colorize(p.PostProcess), tenary(i%2 == 0, "bg-zinc-200", "bg-zinc-300") }>
+			<a
+				href={ templ.SafeURL(download.URL) }
+				class={ "p-2 gap-1 font-semibold text-sm sm:text-base flex justify-between w-full rounded border-2 border-zinc-800",tenary(i%2==0, "bg-zinc-100", "bg-zinc-200") }
+			>
 				<div class="flex items-center gap-1">
 					@IconMagnet()
 					<span>{ download.Name }</span>
@@ -80,5 +104,39 @@ templ ProductionLanding(p production.Production) {
 				</div>
 			</a>
 		}
+	</div>
+	<div class="mt-6">
+		if c != nil {
+			<form
+				hx-post={ p.ID + "/comment" }
+				hx-encoding="multipart/form-data"
+				hx-target="next div"
+				hx-swap="afterbegin"
+				class="h-10 gap-1 flex items-center"
+			>
+				<img class="h-full rounded" src={ c.Picture }/>
+				<input name="content" placeholder="Write a comment about this." class="px-4 w-full border-2 border-zinc-800 focus:border-zinc-700 rounded h-full placeholder:black"/>
+				<button class="h-full px-2 py-1 rounded bg-zinc-800 hover:bg-zinc-700 font-bold text-zinc-100 flex gap-1 items-center" type="submit">
+					@IconSend()
+					Send
+				</button>
+			</form>
+		} else {
+			@GoogleOneTapPrompt("/production/"+p.ID, true)
+		}
+		<div class="mt-3">
+			if comments, err := production.GatherCommentsFor(p.ID); err == nil {
+				for _, comment := range comments {
+					@Comment(*comment)
+				}
+			}
+		</div>
+	</div>
+}
+
+templ Comment(comment production.Comment) {
+	<div class="flex items-center gap-1">
+		<img class="h-5 rounded" src={ comment.AuthorPicture }/>
+		<span class="font-semibold">{ comment.AuthorName }</span> { comment.Content }
 	</div>
 }

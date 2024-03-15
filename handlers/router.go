@@ -20,6 +20,8 @@ func Setup(public_folder_path string) {
 	Router.Use(middleware.Recoverer)
 
 	Router.Use(middleware.Timeout(60 * time.Second))
+	Router.Use(GoogleMiddleware)
+
 	FileServer(Router, "/", public_folder_path)
 }
 
@@ -32,11 +34,17 @@ func SetupRoutes() {
 }
 
 func routeProduction(r chi.Router) {
-	r.Handle("/new", &PageHandler{Title: "New Production", Page: components.PageProductionNew, Put: production.HandlePut})
-	r.Handle("/{id}", &PageHandler{Title: "Display Production", Page: components.PageProductionSlug})
+	r.Get("/new", handleProductionEdit)
+	r.Put("/new", production.HandlePut)
+
+	r.Get("/{id}", handleProduction)
 	r.Handle("/{id}/edit", &PageHandler{Title: "Edit Production", Page: components.PageProductionSlugEdit, Put: production.HandlePut})
+	r.Post("/{id}/rate", handleProductionRate)
+	r.Post("/{id}/comment", handleProductionComment)
 }
 
 func routeAccountGoogle(r chi.Router) {
+	r.Get("/", handleAccountGoogle)
+	r.Post("/logout", handleGoogleLogout)
 	r.Post("/callback", handleGoogleCallback)
 }

@@ -3,11 +3,7 @@ package components
 import "github.com/ikaio/tailmplx/services/production"
 
 templ PageHome(props PageProps) {
-	<div class="flex flex-wrap gap-1">
-		if productions, err := production.ListProductions(100); err == nil {
-			for _, p := range productions {
-				@ProductionCard(p)
-			}
-		}
-	</div>
+	if productions, err := production.ListProductions(100); err == nil {
+		@ProductionSlide(ProductionSlidesOption{"Added Recently", "New production this week."}, productions)
+	}
 }

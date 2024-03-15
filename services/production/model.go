@@ -41,6 +41,7 @@ type Production struct {
 	Images      ProductionImages      `json:"images"`
 	Downloads   []ProductionDownload  `json:"downloads"`
 	PostProcess ProductionPostProcess `json:"post_process"`
+	Ratings     map[string]string     `json:"ratings"`
 }
 
 func (production *Production) Save() error {
@@ -79,7 +80,7 @@ func FetchProduction(id string) (p *Production, err error) {
 	return
 }
 
-func GetById(id string) (p *Production, e error) {
+func GetById(id string) (*Production, error) {
 	if cached := ProductionCache[id]; cached != nil {
 		return cached, nil
 	}

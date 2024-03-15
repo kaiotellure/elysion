@@ -123,7 +123,7 @@ func ProductionEditor(production production.Production) templ.Component {
 					templ_7745c5c3_Buffer = templ.GetBuffer()
 					defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<template x-for=\"extra in data.images.extras\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<template x-init=\"if (!data.images.extras) data.images.extras = []\" x-for=\"extra in data.images.extras\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -178,7 +178,7 @@ func ProductionEditor(production production.Production) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<template x-for=\"(download, i) in data.downloads\"><div class=\"p-2 bg-zinc-500/5 border border-zinc-500/10\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<template x-init=\"if (!data.downloads) data.downloads = []\" x-for=\"(download, i) in data.downloads\"><div class=\"p-2 bg-zinc-500/5 border border-zinc-500/10\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

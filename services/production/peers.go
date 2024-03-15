@@ -23,6 +23,10 @@ func DisplayCachedPeersOrSchedule(magnet string) string {
 		return "scheduled"
 	}
 
+	if scheduler.IsUpdating {
+		return "counting..."
+	}
+
 	if time.Since(scheduler.LastUpdate) > 1*time.Minute {
 		go UpdatePeers(magnet, scheduler)
 	}

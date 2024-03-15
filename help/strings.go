@@ -5,15 +5,28 @@ import (
 	"strings"
 )
 
-func CN(args ...string) string {
-	return strings.Join(args, " ")
-}
-
 func OR(dynamic, fallback string) string {
 	if len(strings.ReplaceAll(dynamic, " ", "")) == 0 {
 		return fallback
 	}
 	return dynamic
+}
+
+func Tenary[T comparable](condition bool, truthy, falthy T) T {
+	if condition {
+		return truthy
+	}
+	return falthy
+}
+
+// works like an or operator, return the first non-zero value it finds, if none, returns the zero-value
+func NZ[T comparable](vals ...T) T {
+	for _, v := range vals {
+		if v != *new(T) {
+			return v
+		}
+	}
+	return *new(T)
 }
 
 func JoinAnd(str, sep, joint, and string) string {

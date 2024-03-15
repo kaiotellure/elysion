@@ -10,6 +10,7 @@ type GoogleCredential struct {
 	jwt.Claims
 	Sub     string `json:"sub"`
 	Name    string `json:"name"`
+	Email   string `json:"email"`
 	Picture string `json:"picture"`
 }
 
