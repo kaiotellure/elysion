@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -81,6 +82,20 @@ func handleProductionRate(w http.ResponseWriter, r *http.Request) {
 var CommentsDebounce = make(map[string]time.Time)
 
 func handleProductionComment(w http.ResponseWriter, r *http.Request) {
+
+	content := strings.TrimSpace(r.FormValue("content"))
+	withoutspaces := strings.ReplaceAll(content, " ", "")
+
+	if len(withoutspaces) < 10 {
+		components.Warn("Type something longer.").Render(r.Context(), w)
+		return
+	}
+
+	if len(withoutspaces) > 500 {
+		components.Warn("Type something shorter (max: 500).").Render(r.Context(), w)
+		return
+	}
+
 	c := getCredential(r)
 	if c == nil {
 		components.GoogleOneTapPrompt(r.Header.Get("referer"), true).Render(r.Context(), w)
@@ -89,7 +104,7 @@ func handleProductionComment(w http.ResponseWriter, r *http.Request) {
 
 	last_comment_stamp, ok := CommentsDebounce[c.Sub]
 	if ok && time.Since(last_comment_stamp) < 10*time.Second {
-		components.GoogleError("Hell, you type too fast bro, we can't catch you up. Please, wait a while before sending another comment.").Render(r.Context(), w)
+		components.Warn("Please, wait a while before sending another comment.").Render(r.Context(), w)
 		return
 	}
 
@@ -107,7 +122,7 @@ func handleProductionComment(w http.ResponseWriter, r *http.Request) {
 		ID:            database.SF.Generate().String(),
 		AuthorName:    c.Name,
 		AuthorPicture: c.Picture,
-		Content:       r.FormValue("content"),
+		Content:       content,
 	}
 
 	err = production.StoreComment(comment, p.ID, c.Sub, comment.ID)
@@ -116,5 +131,5 @@ func handleProductionComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	components.Comment(comment).Render(r.Context(), w)
+	components.Comment(comment, components.GREENISH).Render(r.Context(), w)
 }

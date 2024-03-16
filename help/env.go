@@ -15,7 +15,6 @@ const (
 	PORT          = "PORT"
 	DATABASE      = "DATABASE"
 	PUBLIC_FOLDER = "PUBLIC_FOLDER"
-	UPLOAD_FOLDER = "UPLOAD_FOLDER"
 )
 
 func init() {

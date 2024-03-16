@@ -86,7 +86,7 @@ templ ProductionLanding(p production.Production, c *google.GoogleCredential, rd 
 			</div>
 			@ProductionRating(p, rd)
 		</div>
-		@markdownraw(p.PostProcess.DescriptionHTML)
+		@markdownraw(string(production.MarkdownToHTML([]byte(p.Description))))
 	</div>
 	<div class="mt-6 flex flex-col gap-1">
 		for i, download := range p.Downloads {
@@ -124,19 +124,24 @@ templ ProductionLanding(p production.Production, c *google.GoogleCredential, rd 
 		} else {
 			@GoogleOneTapPrompt("/production/"+p.ID, true)
 		}
-		<div class="mt-3">
+		<div class="mt-3 flex flex-col gap-1">
 			if comments, err := production.GatherCommentsFor(p.ID); err == nil {
-				for _, comment := range comments {
-					@Comment(*comment)
+				for i, comment := range comments {
+					@Comment(*comment, tenary(i%2 == 0, "bg-zinc-100", "bg-zinc-200"))
 				}
 			}
 		</div>
 	</div>
 }
 
-templ Comment(comment production.Comment) {
-	<div class="flex items-center gap-1">
-		<img class="h-5 rounded" src={ comment.AuthorPicture }/>
-		<span class="font-semibold">{ comment.AuthorName }</span> { comment.Content }
+const GREENISH = "bg-green-100"
+
+templ Comment(comment production.Comment, class string) {
+	<div class={ "flex flex-col gap-2 p-2 rounded", class }>
+		<div class="flex items-center gap-1">
+			<img class="h-4 rounded" src={ comment.AuthorPicture }/>
+			<span class="flex-shrink-0 text-sm leading-none font-semibold">{ comment.AuthorName }</span>
+		</div>
+		<span class="break-all leading-none">{ comment.Content }</span>
 	</div>
 }

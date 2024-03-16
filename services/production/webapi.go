@@ -12,7 +12,7 @@ import (
 	"github.com/muesli/gamut"
 )
 
-func markdownToHTML(md []byte) []byte {
+func MarkdownToHTML(md []byte) []byte {
 	// create markdown parser with extensions
 	extensions := parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock
 	p := parser.NewWithExtensions(extensions)
@@ -41,8 +41,6 @@ func HandlePut(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "json parsing failed: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	production.PostProcess.DescriptionHTML = string(markdownToHTML([]byte(production.Description)))
 
 	primary, err := help.GetImagePrimaryColorFromURL(production.Images.Cover)
 	if err != nil {

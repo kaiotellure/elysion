@@ -11,3 +11,12 @@ templ Anchor(href string) {
 		{ children... }
 	</a>
 }
+
+templ DangerButton(attrib templ.Attributes) {
+	<button
+		class="flex items-center text-red-100 bg-red-800 hover:bg-red-700 transition-opacity duration-200 font-bold border-2 border-red-700 px-2 py-1 rounded"
+		{ attrib... }
+	>
+		{ children... }
+	</button>
+}

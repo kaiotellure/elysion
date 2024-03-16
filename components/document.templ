@@ -16,6 +16,9 @@ templ Navbar(props PageProps) {
 		</a>
 		<div class="flex items-center gap-4">
 			if props.Auth != nil {
+				if props.Auth.Email == help.Env("MASTER", "ikaiodev@gmail.com") {
+					<a href="/admin">Dashboard</a>
+				}
 				<a href={ templ.URL("/account/google") } class="flex items-center text-lg font-bold gap-2">
 					{ props.Auth.Name }
 					<img class="h-10 rounded" src={ props.Auth.Picture }/>

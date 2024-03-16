@@ -31,12 +31,11 @@ templ GoogleOneTapPrompt(resume string, button bool) {
 
 templ GoogleAccountDashboard(c *google.GoogleCredential) {
 	{ c.Name } <span class="font-semibold opacity-80">({ c.Email })</span>
-	<button
-		class="flex items-center gap-1 text-red-800 hover:bg-red-100 transition-opacity duration-200 font-bold border border-red-800 px-2 py-1 rounded"
-		hx-post="google/logout"
-		hx-target="html"
-	>
-		@IconLogout()
+	@DangerButton(templ.Attributes{
+		"hx-post":   "google/logout",
+		"hx-target": "html",
+	}) {
+		@IconLogout("h-3")
 		Logout
-	</button>
+	}
 }

@@ -16,3 +16,10 @@ templ NotFound(props PageProps) {
 		</div>
 	</div>
 }
+
+templ Warn(message string) {
+	<div class="text-red-800 bg-red-100 rounded p-1 flex items-center gap-1">
+		@IconAlert("h-5")
+		<span>{ message }</span>
+	</div>
+}

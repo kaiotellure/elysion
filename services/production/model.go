@@ -27,10 +27,9 @@ type ProductionDownload struct {
 }
 
 type ProductionPostProcess struct {
-	PrimaryColor    string `json:"primary_color"`
-	DarkerColor     string `json:"darker_color"`
-	LigherColor     string `json:"ligher_color"`
-	DescriptionHTML string `json:"description_html"`
+	PrimaryColor string `json:"primary_color"`
+	DarkerColor  string `json:"darker_color"`
+	LigherColor  string `json:"ligher_color"`
 }
 
 type Production struct {
@@ -84,7 +83,12 @@ func GetById(id string) (*Production, error) {
 	if cached := ProductionCache[id]; cached != nil {
 		return cached, nil
 	}
-	return FetchProduction(id)
+	fetched, err := FetchProduction(id)
+	if err != nil {
+		return nil, err
+	}
+	ProductionCache[id] = fetched
+	return fetched, nil
 }
 
 func ListProductions(limit int) (list []*Production, err error) {
@@ -96,6 +100,11 @@ func ListProductions(limit int) (list []*Production, err error) {
 			var production Production
 			json.Unmarshal(v, &production)
 			list = append(list, &production)
+
+			// save to cache if it ain't already
+			if _, ok := ProductionCache[production.ID]; !ok {
+				ProductionCache[production.ID] = &production
+			}
 		}
 
 		return nil

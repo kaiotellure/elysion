@@ -29,6 +29,7 @@ func SetupRoutes() {
 	Router.Handle("/", &PageHandler{Title: "Home", Page: components.PageHome})
 	Router.NotFound((&PageHandler{Title: "Not Found", Page: components.NotFound}).ServeHTTP)
 
+	Router.Route("/admin", routeAdmin)
 	Router.Route("/production", routeProduction)
 	Router.Route("/account/google", routeAccountGoogle)
 }

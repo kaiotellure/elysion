@@ -78,7 +78,7 @@ templ ProductionEditor(production production.Production) {
 templ notifications() {
 	<template x-for="notification in notifications">
 		<div class="gap-1 p-2 rounded border flex items-center" :class="notification.error ? 'text-red-800 bg-red-100 border-red-800' : 'text-emerald-800 bg-emerald-100 border-emerald-800'">
-			@IconAlert()
+			@IconAlert("h-5")
 			<span class="font-bold" x-text="notification.message"></span>
 		</div>
 	</template>
