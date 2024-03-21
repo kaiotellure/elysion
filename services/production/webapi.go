@@ -12,18 +12,18 @@ import (
 	"github.com/muesli/gamut"
 )
 
-func MarkdownToHTML(md []byte) []byte {
+func MarkdownToHTML(md string) string {
 	// create markdown parser with extensions
 	extensions := parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock
 	p := parser.NewWithExtensions(extensions)
-	doc := p.Parse(md)
+	doc := p.Parse([]byte(md))
 
 	// create HTML renderer with extensions
 	htmlFlags := html.CommonFlags | html.HrefTargetBlank
 	opts := html.RendererOptions{Flags: htmlFlags}
 	renderer := html.NewRenderer(opts)
 
-	return markdown.Render(doc, renderer)
+	return string(markdown.Render(doc, renderer))
 }
 
 func HandlePut(w http.ResponseWriter, r *http.Request) {
@@ -42,17 +42,7 @@ func HandlePut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	primary, err := help.GetImagePrimaryColorFromURL(production.Images.Cover)
-	if err != nil {
-		http.Error(w, "cover image primary color detection failed: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	production.PostProcess.PrimaryColor = primary
-
-	color := gamut.Hex(primary)
-	production.PostProcess.LigherColor = gamut.ToHex(gamut.Lighter(color, 1.))
-	production.PostProcess.DarkerColor = gamut.ToHex(gamut.Darker(color, .4))
+	DoPostProcess(&production)
 
 	err = production.Save()
 	if err != nil {
@@ -61,4 +51,18 @@ func HandlePut(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Write([]byte("Production was saved successfully."))
+}
+
+func DoPostProcess(p *Production) error {
+	primary, err := help.GetImagePrimaryColorFromURL(p.Images.Cover)
+	if err != nil {
+		return err
+	}
+
+	p.PostProcess.PrimaryColor = primary
+
+	color := gamut.Hex(primary)
+	p.PostProcess.LigherColor = gamut.ToHex(gamut.Lighter(color, 1.))
+	p.PostProcess.DarkerColor = gamut.ToHex(gamut.Darker(color, .4))
+	return nil
 }

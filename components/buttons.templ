@@ -1,7 +1,10 @@
 package components
 
 templ Button(href string) {
-	<a href={ templ.URL(href) } class="px-4 py-2 gap-1 w-max rounded flex items-center font-bold bg-blue-600 hover:bg-blue-500 transition-colors">
+	<a
+		href={ templ.URL(href) }
+		class="px-4 py-2 gap-1 w-max rounded flex items-center font-bold bg-blue-600 hover:bg-blue-500 transition-colors"
+	>
 		{ children... }
 	</a>
 }
@@ -16,6 +19,15 @@ templ DangerButton(attrib templ.Attributes) {
 	<button
 		class="flex items-center text-red-100 bg-red-800 hover:bg-red-700 transition-opacity duration-200 font-bold border-2 border-red-700 px-2 py-1 rounded"
 		{ attrib... }
+	>
+		{ children... }
+	</button>
+}
+
+templ MinimalButton() {
+	<button
+		class="h-full px-2 py-1 rounded bg-zinc-800 hover:bg-zinc-700 font-bold text-zinc-100 flex gap-1 items-center"
+		type="submit"
 	>
 		{ children... }
 	</button>

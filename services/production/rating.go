@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/ikaio/tailmplx/database"
+	"github.com/ikaio/tailmplx/services/database"
 	"github.com/ikaio/tailmplx/help"
 	"go.etcd.io/bbolt"
 )

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/ikaio/tailmplx/database"
+	"github.com/ikaio/tailmplx/services/database"
 	"go.etcd.io/bbolt"
 )
 

@@ -35,6 +35,9 @@ func JoinAnd(str, sep, joint, and string) string {
 	}
 	list := make([]string, 0)
 	cs := strings.Split(str, sep)
+	if len(cs) == 1 {
+		return cs[0]
+	}
 	for _, item := range cs[:len(cs)-1] {
 		list = append(list, strings.TrimSpace(item))
 	}

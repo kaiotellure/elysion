@@ -13,4 +13,12 @@ templ AdminDashboard(m runtime.MemStats) {
 	@DangerButton(templ.Attributes{}) {
 		Clean Cache
 	}
+	<h1 class="text-lg font-semibold">Import from Comando.la</h1>
+	<form class="flex" hx-post="/production/import" hx-encoding="multipart/form-data">
+		@Input("comando-url", "e.g: comando.la/oppenheimer")
+		@MinimalButton() {
+			@IconSend()
+			Import
+		}
+	</form>
 }

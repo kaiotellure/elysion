@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/ikaio/tailmplx/database"
+	"github.com/ikaio/tailmplx/services/database"
 	"go.etcd.io/bbolt"
 )
 
@@ -40,7 +40,6 @@ type Production struct {
 	Images      ProductionImages      `json:"images"`
 	Downloads   []ProductionDownload  `json:"downloads"`
 	PostProcess ProductionPostProcess `json:"post_process"`
-	Ratings     map[string]string     `json:"ratings"`
 }
 
 func (production *Production) Save() error {

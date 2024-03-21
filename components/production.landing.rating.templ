@@ -1,0 +1,39 @@
+package components
+
+import "strconv"
+import "github.com/ikaio/tailmplx/help"
+import "github.com/ikaio/tailmplx/services/production"
+
+type ProductionRatingData struct {
+	Mine string
+	Love int
+	Like int
+}
+
+templ rateButton(id, kind, active string, count int) {
+	<button
+		hx-indicator="#loader" hx-swap="outerHTML" hx-target="closest div"
+		hx-post={ id + "/rate?type=" + help.Tenary(active == kind, "none", kind) }
+		class={
+         "gap-1 px-2 py-1 font-semibold rounded border-2 flex",
+         templ.KV("bg-zinc-200 border-zinc-800", active==kind )
+      }
+	>
+		if count > 0 {
+			{ strconv.Itoa(count) }
+		}
+		{ children... }
+	</button>
+}
+
+templ ProductionRating(p production.Production, rd ProductionRatingData) {
+	<div class="flex items-center gap-1">
+		@IconLoading()
+		@rateButton(p.ID, "love", rd.Mine, rd.Love) {
+			@IconHeart()
+		}
+		@rateButton(p.ID, "like", rd.Mine, rd.Like) {
+			@IconLike()
+		}
+	</div>
+}

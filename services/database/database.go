@@ -12,7 +12,6 @@ var SF *snowflake.Node
 
 func Setup(database_path string) {
 
-	// Setup snowflake node for id generation
 	sf, err := snowflake.NewNode(1)
 	if err != nil {
 		panic(err)
@@ -23,7 +22,6 @@ func Setup(database_path string) {
 		panic(err)
 	}
 
-	// create buckets if they don't exists, this is expected to run only once ever
 	err = db.Update(func(tx *bbolt.Tx) error {
 		tx.CreateBucketIfNotExists([]byte("productions"))
 		tx.CreateBucketIfNotExists([]byte("ratings"))
@@ -37,6 +35,10 @@ func Setup(database_path string) {
 
 	DB = db
 	SF = sf
+}
+
+func NewUUID() string {
+	return SF.Generate().String()
 }
 
 // itob returns an 8-byte big endian representation of v.

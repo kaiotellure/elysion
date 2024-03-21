@@ -6,7 +6,6 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/ikaio/tailmplx/components"
-	"github.com/ikaio/tailmplx/services/production"
 )
 
 var Router *chi.Mux = chi.NewRouter()
@@ -32,16 +31,6 @@ func SetupRoutes() {
 	Router.Route("/admin", routeAdmin)
 	Router.Route("/production", routeProduction)
 	Router.Route("/account/google", routeAccountGoogle)
-}
-
-func routeProduction(r chi.Router) {
-	r.Get("/new", handleProductionEdit)
-	r.Put("/new", production.HandlePut)
-
-	r.Get("/{id}", handleProduction)
-	r.Handle("/{id}/edit", &PageHandler{Title: "Edit Production", Page: components.PageProductionSlugEdit, Put: production.HandlePut})
-	r.Post("/{id}/rate", handleProductionRate)
-	r.Post("/{id}/comment", handleProductionComment)
 }
 
 func routeAccountGoogle(r chi.Router) {

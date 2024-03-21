@@ -2,40 +2,30 @@ package components
 
 import "fmt"
 import "github.com/ikaio/tailmplx/services/google"
+import "github.com/ikaio/tailmplx/help"
 
 templ GoogleError(message string) {
-	{ message }
+{ message }
 }
 
 templ GoogleOneTapPrompt(resume string, button bool) {
-	<script src="https://accounts.google.com/gsi/client" async></script>
-	<div
-		id="g_id_onload"
-		data-login_hint
-		data-auto_prompt={ tenary(button, "false", "true") }
-		data-client_id="581950817468-tlv862s1q1eev873rituo6m1d61ftp5i.apps.googleusercontent.com"
-		data-login_uri={ fmt.Sprintf("http://localhost:3000/account/google/callback?resume=%s", resume) }
-	></div>
-	if button {
-		<div
-			class="g_id_signin"
-			data-type="standard"
-			data-size="large"
-			data-theme="outline"
-			data-text="sign_in_with"
-			data-shape="rectangular"
-			data-logo_alignment="left"
-		></div>
-	}
+<script src="https://accounts.google.com/gsi/client" async></script>
+<div id="g_id_onload" data-login_hint data-auto_prompt={ help.Tenary(button, "false" , "true" ) }
+   data-client_id="581950817468-tlv862s1q1eev873rituo6m1d61ftp5i.apps.googleusercontent.com" data-login_uri={
+   fmt.Sprintf("http://localhost:3000/account/google/callback?resume=%s", resume) }></div>
+if button {
+<div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
+   data-shape="rectangular" data-logo_alignment="left"></div>
+}
 }
 
 templ GoogleAccountDashboard(c *google.GoogleCredential) {
-	{ c.Name } <span class="font-semibold opacity-80">({ c.Email })</span>
-	@DangerButton(templ.Attributes{
-		"hx-post":   "google/logout",
-		"hx-target": "html",
-	}) {
-		@IconLogout("h-3")
-		Logout
-	}
+{ c.Name } <span class="font-semibold opacity-80">({ c.Email })</span>
+@DangerButton(templ.Attributes{
+"hx-post": "google/logout",
+"hx-target": "html",
+}) {
+@IconLogout("h-3")
+Logout
+}
 }

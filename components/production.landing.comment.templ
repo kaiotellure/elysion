@@ -1,0 +1,15 @@
+package components
+
+import "github.com/ikaio/tailmplx/services/production"
+
+const GREENISH = "bg-green-100"
+
+templ Comment(comment production.Comment, class string) {
+	<div class={ "flex flex-col gap-2 p-2 rounded" , class }>
+		<div class="flex items-center gap-1">
+			<img class="h-4 rounded" src={ comment.AuthorPicture }/>
+			<span class="flex-shrink-0 text-sm leading-none font-semibold">{ comment.AuthorName }</span>
+		</div>
+		<span class="break-all leading-none">{ comment.Content }</span>
+	</div>
+}

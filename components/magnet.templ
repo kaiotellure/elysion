@@ -1,0 +1,14 @@
+package components
+
+import "github.com/ikaio/tailmplx/services/production"
+
+templ Magnet(magnet production.ProductionDownload, processor func(string)string) {
+	<a
+		class="p-1 gap-1 flex rounded bg-emerald-100 text-emerald-800 border-emerald-800 border-2"
+		href={templ.SafeURL(magnet.URL)}
+      title={magnet.Name}
+	>
+		@IconMagnet()
+		{ processor(magnet.Name) }
+	</a>
+}
