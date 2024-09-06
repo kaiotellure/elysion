@@ -1,0 +1,28 @@
+package components
+
+import "github.com/ikaio/tailmplx/services/google"
+
+templ PageEntrar(credentials *google.GoogleCredential) {
+	<div class="flex justify-between items-center">
+		if credentials != nil {
+			<div class="flex gap-2 items-center">
+				<img class="h-[2em]" src={ credentials.Picture }/>
+				<div class="flex flex-col">
+					<h1 class="text-lg font-bold leading-none">{ credentials.Name }</h1>
+					<h1 class="font-sans text-xs opacity-75 leading-none">{ credentials.Email }</h1>
+				</div>
+			</div>
+			@DangerButton("/conta/sair") {
+				@IconLogout()
+				Sair
+			}
+		} else {
+			<div>
+				<h1 class="text-lg font-bold leading-none">Entre com o Google</h1>
+				<h2 class="text-sm mb-2 leading-tight opacity-75">e comece a matar sua fome.</h2>
+				@GoogleLoginPrompt("/", true)
+				<h3 class="text-xs mt-2 leading-tight opacity-50">Apenas usamos seu nome, foto do perfil e email.</h3>
+			</div>
+		}
+	</div>
+}

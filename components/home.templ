@@ -1,9 +1,42 @@
 package components
 
-import "github.com/ikaio/tailmplx/services/production"
+templ Header(icon templ.Component, title, description string) {
+	<div class="mb-4">
+		<h1 class="flex items-center gap-1 font-semibold leading-none">
+			@icon
+			{ title }
+		</h1>
+		<h2 class="opacity-75 text-xs leading-tight">
+			{ description }
+		</h2>
+	</div>
+}
 
-templ PageHome(props PageProps) {
-	if productions, err := production.ListProductions(100); err == nil {
-		@ProductionSlide(ProductionSlidesOption{"Added Recently", "New production this week."}, productions)
-	}
+templ PageHome() {
+	@Header(IconSparkle(), "Top Pedidos de Hoje", "Ordem dos pratos mais pedidos nas últimas 24 horas.")
+	<div class="flex gap-2 items-center">
+		<div class="mb-4 relative">
+			<div class="bg-gradient-to-r from-black opacity-40 font-sans absolute left-0 top-0 text-[10em] leading-none">1</div>
+			<img class="w-40 aspect-square object-cover" src="assets/coquet.jpg"/>
+		</div>
+		<div class="mb-4 relative">
+			<div class="bg-gradient-to-r from-black opacity-40 font-sans absolute left-0 top-0 text-[10em] leading-none">2</div>
+			<img class="w-40 aspect-square object-cover" src="assets/coquet.jpg"/>
+		</div>
+	</div>
+	@Header(IconClock(), "Seus Pedidos Recentes", "Últimos pedidos feitos por você.")
+	<div class="flex gap-2 items-center">
+		<div class="mb-4 relative">
+			<div class="bg-gradient-to-r from-black opacity-40 font-sans absolute left-0 top-0 text-[10em] leading-none">1</div>
+			<img class="w-40 aspect-square object-cover" src="assets/coquet.jpg"/>
+		</div>
+		<div class="mb-4 relative">
+			<div class="bg-gradient-to-r from-black opacity-40 font-sans absolute left-0 top-0 text-[10em] leading-none">2</div>
+			<img class="w-40 aspect-square object-cover" src="assets/coquet.jpg"/>
+		</div>
+	</div>
+	<img
+		class="mb-4 rounded-sm blur opacity-5 w-full absolute -z-10 left-0 top-0"
+		src="/assets/picture.jpg"
+	/>
 }

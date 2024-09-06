@@ -20,7 +20,7 @@ fi
 
 if ! available "air"; then
     echo "Installing: air"
-    go install github.com/cosmtrek/air@latest
+    go install github.com/air-verse/air@latest
 fi
 
 if ! available "templ"; then
@@ -29,7 +29,7 @@ if ! available "templ"; then
 fi
 
 if ! available "tailwindcss"; then
-    echo "Installing: tailwindcss (cli)"
+    echo "Installing: tailwindcss (globally)"
     npm i -g tailwindcss
 fi
 

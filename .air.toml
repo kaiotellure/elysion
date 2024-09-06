@@ -1,15 +1,7 @@
 [build]
 
   bin = "./tmp/tailmplx"
-
-  # generate css and in parallel transpile templ then run
-  cmd = "tailwind -i web/input.css -o web/public/assets/output.css && templ generate && go build -o ./tmp/"
-
-  # we dont need to update when these changes
+  cmd = "tailwind -c web/tailwind.config.js -i web/input.css -o web/public/assets/output.css && templ generate && go build -o ./tmp/"
   exclude_dir = ["tmp", ".git", ".github", "web/public"]
-
-  # prevent infinite cycle, as templ transpiling changes go files
   exclude_regex = [".*_templ.go", ".*output.css"]
-
-  # css for input.css, js for tailwind config
   include_ext = ["go", "templ", "css", "js"]

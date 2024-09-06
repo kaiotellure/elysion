@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -22,19 +23,37 @@ func Setup(public_folder_path string) {
 	Router.Use(GoogleMiddleware)
 
 	FileServer(Router, "/", public_folder_path)
+	SetupRoutes()
+}
+
+func notFoundHandler(w http.ResponseWriter, r *http.Request) {
+	components.Document(
+		components.PageProps{
+			Request: r, Auth: getCredential(r),
+			Title: "Página Não Encontrada",
+		},
+		components.NotFound(r),
+	).Render(r.Context(), w)
+}
+
+func handleHome(w http.ResponseWriter, r *http.Request) {
+	components.Document(
+		components.PageProps{
+			Request: r, Auth: getCredential(r),
+			Title: "Elysion Bistro Restaurante",
+		},
+		components.PageHome(),
+	).Render(r.Context(), w)
 }
 
 func SetupRoutes() {
-	Router.Handle("/", &PageHandler{Title: "Home", Page: components.PageHome})
-	Router.NotFound((&PageHandler{Title: "Not Found", Page: components.NotFound}).ServeHTTP)
-
-	Router.Route("/admin", routeAdmin)
-	Router.Route("/production", routeProduction)
-	Router.Route("/account/google", routeAccountGoogle)
+	Router.NotFound(notFoundHandler)
+	Router.Get("/", handleHome)
+	Router.Route("/conta", routeAccount)
 }
 
-func routeAccountGoogle(r chi.Router) {
-	r.Get("/", handleAccountGoogle)
-	r.Post("/logout", handleGoogleLogout)
+func routeAccount(r chi.Router) {
+	r.Get("/", handleConta)
+	r.Get("/sair", handleGoogleLogout)
 	r.Post("/callback", handleGoogleCallback)
 }

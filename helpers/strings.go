@@ -1,4 +1,4 @@
-package help
+package helpers
 
 import (
 	"fmt"
@@ -41,5 +41,8 @@ func JoinAnd(str, sep, joint, and string) string {
 	for _, item := range cs[:len(cs)-1] {
 		list = append(list, strings.TrimSpace(item))
 	}
-	return fmt.Sprintf("%s %s %s", strings.Join(list, joint), and, strings.TrimSpace(cs[len(cs)-1]))
+	return fmt.Sprintf(
+		"%s %s %s", strings.Join(list, joint),
+		and, strings.TrimSpace(cs[len(cs)-1]),
+	)
 }

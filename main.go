@@ -4,16 +4,15 @@ import (
 	"net/http"
 
 	"github.com/ikaio/tailmplx/handlers"
-	"github.com/ikaio/tailmplx/help"
+	"github.com/ikaio/tailmplx/helpers"
 	"github.com/ikaio/tailmplx/services/database"
 )
 
 func main() {
-	database.Setup(help.Env(help.DATABASE, "tmp/main.development.db"))
-	handlers.Setup(help.Env(help.PUBLIC_FOLDER, "web/public"))
-	handlers.SetupRoutes()
+	database.Setup(helpers.Env(helpers.DATABASE))
+	handlers.Setup(helpers.Env(helpers.PUBLIC_FOLDER))
 
-	address := ":" + help.Env(help.PORT, "3000")
+	address := ":" + helpers.Env(helpers.PORT)
 	if err := http.ListenAndServe(address, handlers.Router); err != nil {
 		panic(err)
 	}

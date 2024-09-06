@@ -1,0 +1,25 @@
+package components
+
+templ DangerButton(href string) {
+	<a
+		href={ templ.SafeURL(href) }
+		class="text-xs flex gap-1 items-center w-fit px-4 py-2 rounded-sm bg-rose-800 bg-opacity-40 border border-rose-600 hover:border-rose-700 text-rose-50 font-bold cursor-pointer"
+	>
+		{ children... }
+	</a>
+}
+
+templ TransparentButton(href string) {
+	<a
+		href={ templ.SafeURL(href) }
+		class="text-xs flex gap-1 items-center w-fit px-4 py-2 rounded-sm bg-teal-800 bg-opacity-40 border border-teal-600 hover:border-teal-700 text-teal-50 font-bold cursor-pointer"
+	>
+		{ children... }
+	</a>
+}
+
+templ RoundBadge() {
+	<span class="bg-teal-500 rounded-full text-[.6em] justify-center items-center w-3 h-3 inline-flex">
+		{ children... }
+	</span>
+}

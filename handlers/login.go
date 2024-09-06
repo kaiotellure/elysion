@@ -27,23 +27,22 @@ func GoogleMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func handleAccountGoogle(w http.ResponseWriter, r *http.Request) {
-	c := getCredential(r)
-	if c == nil {
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-		return
-	}
+func handleConta(w http.ResponseWriter, r *http.Request) {
+	credentials := getCredential(r)
 
 	components.Document(
-		components.PageProps{Request: r, Auth: c},
-		components.GoogleAccountDashboard(c),
-		"Account Dashboard",
+		components.PageProps{
+			Request: r, Auth: credentials,
+			Title: "Entrar com o Google",
+		},
+		components.PageEntrar(credentials),
 	).Render(r.Context(), w)
 }
 
 func handleGoogleLogout(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{Name: "g_credential", MaxAge: -1, Path: "/"})
 	w.Header().Set("hx-redirect", "/") // redirect htmx buttons
+	http.Redirect(w, r, r.URL.Query().Get("resume"), http.StatusSeeOther)
 }
 
 func handleGoogleCallback(w http.ResponseWriter, r *http.Request) {
@@ -52,9 +51,11 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		components.Document(
-			components.PageProps{Auth: c, Request: r},
+			components.PageProps{
+				Auth: c, Request: r,
+				Title: "Google Login Failed",
+			},
 			components.GoogleError(err.Error()),
-			"Google Login Failed",
 		).Render(r.Context(), w)
 	}
 

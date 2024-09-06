@@ -1,17 +1,19 @@
 package components
 
-templ NotFound(props PageProps) {
+import "net/http"
+
+templ NotFound(request *http.Request) {
 	<div class="max-w-[750px] flex flex-col gap-2">
-		<h1 class="font-bold text-2xl">404: { props.Request.URL.Path }</h1>
-		Sorry, we could not find the page you were looking for, it may have been deleted or there is a typo.
+		<h1 class="font-bold text-2xl">{ request.URL.Path }</h1>
+		Esta página não existe ou foi removida, se acha que isso é um erro, por-favor, contate-nos.
 		<div class="flex items-center gap-2">
-			@Button("/") {
+			@TransparentButton("/") {
 				@IconUndo()
-				return home
+				Retornar Ao Início
 			}
-			@Button("/report") {
+			@TransparentButton("https://instagram.com/milie") {
 				@IconBug()
-				report an issue
+				Reportar Um Problema
 			}
 		</div>
 	</div>
@@ -19,7 +21,7 @@ templ NotFound(props PageProps) {
 
 templ Warn(message string) {
 	<div class="text-red-800 bg-red-100 rounded p-1 flex items-center gap-1">
-		@IconAlert("h-5")
+		@IconAlert()
 		<span>{ message }</span>
 	</div>
 }

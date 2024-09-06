@@ -2,26 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  * {
-    font-family: 'Be Vietnam Pro';
-  }
-  .markdown ul {
-    @apply flex flex-col gap-1  
-  }
-  .markdown h1 {
-    @apply font-bold text-lg mt-2
-  }
-  .markdown p {
-    @apply leading-tight text-sm opacity-80
-  }
-  .markdown a {
-    @apply text-blue-500 underline
-  }
-  .markdown code {
-    @apply font-sans font-medium bg-zinc-200 px-1
-  }
-  .markdown code::before {
-    content: '· '
-  }
+* {
+    font-family: SUSE;
 }

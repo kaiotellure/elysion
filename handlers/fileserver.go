@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/ikaio/tailmplx/help"
+	"github.com/ikaio/tailmplx/helpers"
 )
 
 func FileServer(router *chi.Mux, path, root string) {
@@ -35,7 +35,7 @@ func FileServer(router *chi.Mux, path, root string) {
 			return
 		}
 
-		switch help.Env(help.MODE, "development") {
+		switch helpers.Env(helpers.MODE) {
 		case "production":
 			// 1 week cache, catch weekly updates
 			w.Header().Set("Cache-Control", "public, max-age=604800")
