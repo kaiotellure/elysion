@@ -2,8 +2,13 @@ package helpers
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
+
+func Str(i int) string {
+	return strconv.Itoa(i)
+}
 
 func OR(dynamic, fallback string) string {
 	if len(strings.ReplaceAll(dynamic, " ", "")) == 0 {

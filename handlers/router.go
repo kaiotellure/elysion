@@ -42,7 +42,7 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 			Request: r, Auth: getCredential(r),
 			Title: "Elysion Bistro Restaurante",
 		},
-		components.PageHome(),
+		components.PageHome(ListMeals()),
 	).Render(r.Context(), w)
 }
 
@@ -50,10 +50,15 @@ func SetupRoutes() {
 	Router.NotFound(notFoundHandler)
 	Router.Get("/", handleHome)
 	Router.Route("/conta", routeAccount)
+	Router.Route("/prato", routePrato)
 }
 
 func routeAccount(r chi.Router) {
 	r.Get("/", handleConta)
 	r.Get("/sair", handleGoogleLogout)
 	r.Post("/callback", handleGoogleCallback)
+}
+
+func routePrato(r chi.Router) {
+	r.Get("/{id}", handlePrato)
 }

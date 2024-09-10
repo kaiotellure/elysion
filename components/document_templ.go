@@ -202,7 +202,7 @@ func Footer() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" Elysion Restaurantes Brasil, Ltd.</span> <span>Rua. Deputado Oliveira Manson, São Paulo - SP, Brasil</span> <span>CPNJ: 124-248-242-49</span><div class=\"flex items-center gap-1 mt-2\"><a class=\"hover:text-zinc-200\" href=\"https://www.instagram.com/milie\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" Elysion Restaurantes Brasil, Ltd.</span> <span>Rua. Deputado Oliveira Manson, São Paulo - SP, Brasil</span> <span>CPNJ: 00.000.000/0000-00</span><div class=\"flex items-center gap-1 mt-2\"><a class=\"hover:text-zinc-200\" href=\"https://www.instagram.com/milie\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -218,7 +218,7 @@ func Footer() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></div></div><div class=\"flex flex-col\"><h1 class=\"font-semibold\">Website</h1><a class=\"hover:opacity-75\" href=\"\">Mapa do Site</a> <a class=\"hover:opacity-75\" href=\"\">Termos & Condições</a> <a class=\"hover:opacity-75\" href=\"\">Assuntos Jurídicos</a></div><div class=\"flex flex-col\"><h1 class=\"font-semibold\">Produtos</h1><a class=\"hover:opacity-75\" href=\"\">Novos micJAGUAR</a> <a class=\"hover:opacity-75\" href=\"\">Novos micLOBSTER</a> <a class=\"hover:opacity-75\" href=\"\">Novos micJANGUAR</a></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></div></div><div class=\"flex flex-col\"><h1 class=\"font-semibold\">Website</h1><a class=\"hover:opacity-75\" href=\"\">Mapa do Site</a> <a class=\"hover:opacity-75\" href=\"\">Termos & Condições</a> <a class=\"hover:opacity-75\" href=\"\">Assuntos Jurídicos</a></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -257,7 +257,7 @@ func Document(props PageProps, page templ.Component) templ.Component {
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(props.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/document.templ`, Line: 97, Col: 23}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/document.templ`, Line: 91, Col: 23}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
