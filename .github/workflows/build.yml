@@ -17,7 +17,7 @@ jobs:
       - name: Installing Dependencies
         run: |
           npm i -g tailwindcss
-          go mod download
+          go mod tidy
 
       - name: Create Release Directory
         run: mkdir release 2>/dev/null
@@ -29,7 +29,7 @@ jobs:
         run: cp -r web/public release
 
       - name: Generate Tailwind Output CSS
-        run: tailwindcss --minify -c tailwind.config.js -i web/input.css -o release/public/assets/output.css
+        run: tailwindcss --minify -c web/tailwind.config.js -i web/input.css -o release/public/assets/output.css
 
       - uses: actions/upload-artifact@v4
         with:
