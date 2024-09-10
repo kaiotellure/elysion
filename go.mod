@@ -1,10 +1,6 @@
-module github.com/ikaio/tailmplx
+module github.com/kaiotellure/lysion
 
 go 1.21.5
-
-toolchain go1.23.0
-
-replace github.com/ikaio/tailmplx => ./
 
 require (
 	github.com/PuerkitoBio/goquery v1.9.1

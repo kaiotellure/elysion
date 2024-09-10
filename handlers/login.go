@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/ikaio/tailmplx/components"
-	"github.com/ikaio/tailmplx/services/google"
+	"github.com/kaiotellure/lysion/components"
+	"github.com/kaiotellure/lysion/services/google"
 )
 
 func getCredential(r *http.Request) *google.GoogleCredential {

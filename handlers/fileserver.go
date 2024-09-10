@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/ikaio/tailmplx/helpers"
+	"github.com/kaiotellure/lysion/helpers"
 )
 
 func FileServer(router *chi.Mux, path, root string) {

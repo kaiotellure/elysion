@@ -3,9 +3,9 @@ package main
 import (
 	"net/http"
 
-	"github.com/ikaio/tailmplx/handlers"
-	"github.com/ikaio/tailmplx/helpers"
-	"github.com/ikaio/tailmplx/services/database"
+	"github.com/kaiotellure/lysion/handlers"
+	"github.com/kaiotellure/lysion/helpers"
+	"github.com/kaiotellure/lysion/services/database"
 )
 
 func main() {

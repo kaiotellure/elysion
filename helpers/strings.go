@@ -6,8 +6,12 @@ import (
 	"strings"
 )
 
-func Str(i int) string {
+func Itoa(i int) string {
 	return strconv.Itoa(i)
+}
+
+func Empty(str string) bool {
+	return len(strings.ReplaceAll(str, " ", "")) == 0
 }
 
 func OR(dynamic, fallback string) string {

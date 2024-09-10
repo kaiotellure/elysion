@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/ikaio/tailmplx/components"
+	"github.com/kaiotellure/lysion/components"
 )
 
 var MEALS []components.Meal = []components.Meal{

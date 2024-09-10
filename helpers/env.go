@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"errors"
 	"os"
 	"strconv"
 	"time"
@@ -17,11 +18,18 @@ const (
 	CANONICAL_HOST   = "CANONICAL_HOST"
 )
 
-var DEFAULTS_ENV = map[string]string{
-	"DATABASE":      "tmp/main.development.db",
-	"PUBLIC_FOLDER": "web/public",
-	"PORT":          "3000",
-	"MODE":          "development",
+type prop struct {
+	Default  string
+	Required bool
+}
+
+var PROPS = map[string]prop{
+	"MODE":             {"development", false},
+	"PORT":             {"3000", false},
+	"DATABASE":         {"tmp/main.development.db", false},
+	"PUBLIC_FOLDER":    {"web/public", false},
+	"GOOGLE_CLIENT_ID": {"", true},
+	"CANONICAL_HOST":   {"", true},
 }
 
 func init() {
@@ -29,7 +37,15 @@ func init() {
 }
 
 func Env(key string) string {
-	return OR(os.Getenv(key), DEFAULTS_ENV[key])
+	props, ok := PROPS[key]
+	if !ok {
+		panic(errors.New("querying non-registered env variable."))
+	}
+	defined := OR(os.Getenv(key), props.Default)
+	if Empty(defined) && props.Required {
+		panic(errors.New("required env variable not defined: " + key))
+	}
+	return defined
 }
 
 func CurrentYear() string {
