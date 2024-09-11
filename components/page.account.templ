@@ -2,7 +2,7 @@ package components
 
 import "github.com/kaiotellure/lysion/services/google"
 
-templ PageEntrar(credentials *google.GoogleCredential) {
+templ PageAccount(credentials *google.GoogleCredential) {
 	<div class="flex justify-between items-center">
 		if credentials != nil {
 			<div class="flex gap-2 items-center">
@@ -12,7 +12,7 @@ templ PageEntrar(credentials *google.GoogleCredential) {
 					<h1 class="font-sans text-xs opacity-75 leading-none">{ credentials.Email }</h1>
 				</div>
 			</div>
-			@DangerButton("/conta/sair") {
+			@Button(DANGER, templ.Attributes{"href": "/conta/sair"}) {
 				@IconLogout()
 				Sair
 			}

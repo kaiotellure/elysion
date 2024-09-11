@@ -5,9 +5,11 @@ import (
 	"net/http"
 
 	"github.com/kaiotellure/lysion/components"
+	"github.com/kaiotellure/lysion/helpers"
 	"github.com/kaiotellure/lysion/services/google"
 )
 
+// Extracts Google Login information from a request context, previously inserted by GoogleMiddleware()
 func getCredential(r *http.Request) *google.GoogleCredential {
 	if c, ok := r.Context().Value("credential").(*google.GoogleCredential); ok {
 		return c
@@ -15,6 +17,8 @@ func getCredential(r *http.Request) *google.GoogleCredential {
 	return nil
 }
 
+// This middleware parsers a g_credential cookie containing Google Login infos
+// and puts it into the request context, that can be read later using getCredential
 func GoogleMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if credential_cookie, err := r.Cookie("g_credential"); err == nil {
@@ -27,25 +31,27 @@ func GoogleMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func handleConta(w http.ResponseWriter, r *http.Request) {
+func handleAccount(w http.ResponseWriter, r *http.Request) {
 	credentials := getCredential(r)
 
 	components.Document(
 		components.PageProps{
 			Request: r, Auth: credentials,
-			Title: "Entrar com o Google",
+			Title: helpers.Tenary(
+				credentials == nil, "Entrar com o Google", "Sua Conta",
+			),
 		},
-		components.PageEntrar(credentials),
+		components.PageAccount(credentials),
 	).Render(r.Context(), w)
 }
 
-func handleGoogleLogout(w http.ResponseWriter, r *http.Request) {
+func handleAccountLogout(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{Name: "g_credential", MaxAge: -1, Path: "/"})
 	w.Header().Set("hx-redirect", "/") // redirect htmx buttons
 	http.Redirect(w, r, r.URL.Query().Get("resume"), http.StatusSeeOther)
 }
 
-func handleGoogleCallback(w http.ResponseWriter, r *http.Request) {
+func handleAccountCallback(w http.ResponseWriter, r *http.Request) {
 	token := r.FormValue("credential")
 	c, err := google.ParseJWTCredential(token)
 

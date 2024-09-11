@@ -1,7 +1,5 @@
 package components
 
-import "github.com/kaiotellure/lysion/helpers"
-
 templ Header(icon templ.Component, title, description string) {
 	<div class="mb-4">
 		<h1 class="flex items-center gap-1 font-semibold leading-normal">
@@ -14,37 +12,9 @@ templ Header(icon templ.Component, title, description string) {
 	</div>
 }
 
-type Meal struct {
-	ID          string
-	Name        string
-	Description string
-	Image       string
-}
-
-templ RankedMeal(index int, data Meal) {
-	<a href={ templ.SafeURL("/prato/" + data.ID) } class="relative">
-		<div class="bg-gradient-to-r from-black opacity-40 font-sans absolute left-0 top-0 text-[10em] leading-none">
-			{ helpers.Itoa(index+1) }
-		</div>
-		<img class="w-40 aspect-square object-cover" src={ data.Image }/>
-	</a>
-}
-
-templ TimedMeal(index int, data Meal) {
-	<a href={ templ.SafeURL("/prato/" + data.ID) } class="relative w-40 aspect-square group">
-		<div class="group-hover:bg-opacity-60 group-hover:bg-black w-full h-full hidden group-hover:flex items-center justify-center text-sm font-semibold p-2">
-			Uma hora atras
-		</div>
-		<img
-			class="-z-10 absolute left-0 top-0 w-full aspect-square object-cover"
-			src={ data.Image }
-		/>
-	</a>
-}
-
 templ background(src string) {
 	<img
-		class="mb-4 rounded-sm blur opacity-5 w-full absolute -z-10 left-0 top-0"
+		class="mb-4 rounded-sm blur opacity-[0.025] w-full absolute -z-10 left-0 top-0"
 		src={ src }
 	/>
 }

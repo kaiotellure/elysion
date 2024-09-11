@@ -10,7 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"fmt"
-	"github.com/ikaio/tailmplx/helpers"
+	"github.com/kaiotellure/lysion/helpers"
 )
 
 func GoogleError(message string) templ.Component {

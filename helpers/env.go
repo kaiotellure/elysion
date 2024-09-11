@@ -10,12 +10,14 @@ import (
 )
 
 const (
+	// No file cache in development mode
 	MODE             = "MODE"
 	PORT             = "PORT"
 	DATABASE         = "DATABASE"
 	PUBLIC_FOLDER    = "PUBLIC_FOLDER"
 	GOOGLE_CLIENT_ID = "GOOGLE_CLIENT_ID"
-	CANONICAL_HOST   = "CANONICAL_HOST"
+	//
+	CANONICAL_HOST = "CANONICAL_HOST"
 )
 
 type prop struct {

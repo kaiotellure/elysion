@@ -6,6 +6,13 @@ import (
 	"strings"
 )
 
+func DisplayPrice(price int) string {
+	return strings.Replace(
+		fmt.Sprintf("%.2f", float32(price)/100),
+		".", ",", -1,
+	)
+}
+
 func Itoa(i int) string {
 	return strconv.Itoa(i)
 }

@@ -9,8 +9,8 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"github.com/ikaio/tailmplx/helpers"
-	"github.com/ikaio/tailmplx/services/google"
+	"github.com/kaiotellure/lysion/helpers"
+	"github.com/kaiotellure/lysion/services/google"
 	"net/http"
 )
 
@@ -32,7 +32,7 @@ func Navbar(props PageProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"relative overflow-hidden w-full h-16 px-5 md:px-20 border-b dark:border-zinc-800 flex items-center justify-between\"><div class=\"flex gap-4 items-center\"><div class=\"flex flex-col\"><a href=\"/\"><img class=\"h-[2em]\" src=\"/assets/logo.png\"></a> <span class=\"text-[.5em] opacity-50\">fechamos em 2h</span></div><a class=\"font-semibold text-sm flex gap-1 items-center hover:opacity-75\" href=\"#\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"relative overflow-hidden w-full h-16 px-5 md:px-20 border-b dark:border-zinc-800 flex items-center justify-between\"><div class=\"flex gap-4 items-center\"><div class=\"flex flex-col\"><a href=\"/\"><img class=\"h-[2em] invert dark:filter-none\" src=\"/assets/logo.png\"></a> <span class=\"text-[.5em] opacity-50\">fechamos em 2h</span></div><a class=\"font-semibold text-sm flex gap-1 items-center hover:opacity-75\" href=\"#\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -105,7 +105,7 @@ func Navbar(props PageProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if props.Auth != nil {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a class=\"flex items-center gap-2\" href=\"/conta\"><img class=\"h-[1em]\" src=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a class=\"flex items-center gap-2 py-1 px-2 rounded bg-white bg-opacity-5\" href=\"/conta\"><img class=\"h-[1em]\" src=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -128,6 +128,14 @@ func Navbar(props PageProps) templ.Component {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/document.templ`, Line: 35, Col: 22}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a> <a class=\"flex items-center gap-2\" href=\"/mesa\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = IconCart().Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -158,7 +166,7 @@ func Navbar(props PageProps) templ.Component {
 				}
 				return templ_7745c5c3_Err
 			})
-			templ_7745c5c3_Err = TransparentButton("/conta").Render(templ.WithChildren(ctx, templ_7745c5c3_Var6), templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = Button(NEUTRAL, templ.Attributes{"href": "/conta"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var6), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -196,13 +204,13 @@ func Footer() templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.CurrentYear())
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/document.templ`, Line: 50, Col: 35}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/document.templ`, Line: 53, Col: 35}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" Elysion Restaurantes Brasil, Ltd.</span> <span>Rua. Deputado Oliveira Manson, São Paulo - SP, Brasil</span> <span>CPNJ: 00.000.000/0000-00</span><div class=\"flex items-center gap-1 mt-2\"><a class=\"hover:text-zinc-200\" href=\"https://www.instagram.com/milie\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" Elysion Restaurantes Brasil, Ltd.</span> <span>Rua. Deputado Oliveira Manson, São Paulo - SP, Brasil</span> <span>00.000.000/0000-00</span><div class=\"flex items-center gap-1 mt-2\"><a class=\"hover:text-zinc-200\" href=\"https://www.instagram.com/milie\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -257,7 +265,7 @@ func Document(props PageProps, page templ.Component) templ.Component {
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(props.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/document.templ`, Line: 91, Col: 23}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/document.templ`, Line: 94, Col: 23}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {

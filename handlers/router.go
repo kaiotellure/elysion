@@ -50,15 +50,22 @@ func SetupRoutes() {
 	Router.NotFound(notFoundHandler)
 	Router.Get("/", handleHome)
 	Router.Route("/conta", routeAccount)
-	Router.Route("/prato", routePrato)
+	Router.Route("/prato", routeMeal)
+	Router.Route("/mesa", routeTable)
 }
 
 func routeAccount(r chi.Router) {
-	r.Get("/", handleConta)
-	r.Get("/sair", handleGoogleLogout)
-	r.Post("/callback", handleGoogleCallback)
+	r.Get("/", handleAccount)
+	r.Get("/sair", handleAccountLogout)
+	r.Post("/callback", handleAccountCallback)
 }
 
-func routePrato(r chi.Router) {
-	r.Get("/{id}", handlePrato)
+func routeMeal(r chi.Router) {
+	r.Get("/{id}", handleMeal)
+}
+
+func routeTable(r chi.Router) {
+	r.Get("/", handleTable)
+	r.Post("/add", handleTableAdd)
+	r.Post("/remove", handleTableRemove)
 }

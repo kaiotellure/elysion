@@ -7,11 +7,11 @@ templ NotFound(request *http.Request) {
 		<h1 class="font-bold text-2xl">{ request.URL.Path }</h1>
 		Esta página não existe ou foi removida, se acha que isso é um erro, por-favor, contate-nos.
 		<div class="flex items-center gap-2">
-			@TransparentButton("/") {
+			@Button(NEUTRAL, templ.Attributes{"href": "/"}) {
 				@IconUndo()
 				Retornar Ao Início
 			}
-			@TransparentButton("https://instagram.com/milie") {
+			@Button(NEUTRAL, templ.Attributes{"href": "/contato"}) {
 				@IconBug()
 				Reportar Um Problema
 			}

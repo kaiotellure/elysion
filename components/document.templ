@@ -10,7 +10,7 @@ templ Navbar(props PageProps) {
 	<div class="relative overflow-hidden w-full h-16 px-5 md:px-20 border-b dark:border-zinc-800 flex items-center justify-between">
 		<div class="flex gap-4 items-center">
 			<div class="flex flex-col">
-				<a href="/"><img class="h-[2em]" src="/assets/logo.png"/></a>
+				<a href="/"><img class="h-[2em] invert dark:filter-none" src="/assets/logo.png"/></a>
 				<span class="text-[.5em] opacity-50">fechamos em 2h</span>
 			</div>
 			<a class="font-semibold text-sm flex gap-1 items-center hover:opacity-75" href="#">
@@ -30,12 +30,15 @@ templ Navbar(props PageProps) {
 		</div>
 		<div class="flex items-center gap-2 text-sm font-semibold">
 			if props.Auth != nil {
-				<a class="flex items-center gap-2" href="/conta">
+				<a class="flex items-center gap-2 py-1 px-2 rounded bg-white bg-opacity-5" href="/conta">
 					<img class="h-[1em]" src={ props.Auth.Picture }/>
 					{ props.Auth.Name }
 				</a>
+				<a class="flex items-center gap-2" href="/mesa">
+					@IconCart()
+				</a>
 			} else {
-				@TransparentButton("/conta") {
+				@Button(NEUTRAL, templ.Attributes{"href": "/conta"}) {
 					@IconGoogle()
 					Entrar
 				}
@@ -49,7 +52,7 @@ templ Footer() {
 		<div class="flex flex-col">
 			<span>© { helpers.CurrentYear() } Elysion Restaurantes Brasil, Ltd.</span>
 			<span>Rua. Deputado Oliveira Manson, São Paulo - SP, Brasil</span>
-			<span>CPNJ: 00.000.000/0000-00</span>
+			<span>00.000.000/0000-00</span>
 			<div class="flex items-center gap-1 mt-2">
 				<a class="hover:text-zinc-200" href="https://www.instagram.com/milie">
 					@IconInstagram()

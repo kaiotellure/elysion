@@ -1,6 +1,6 @@
 [build]
 
-  bin = "./tmp/tailmplx"
+  bin = "./tmp/lysion"
   cmd = "tailwind -c web/tailwind.config.js -i web/input.css -o web/public/assets/output.css && templ generate && go build -o ./tmp/"
   exclude_dir = ["tmp", ".git", ".github", "web/public"]
   exclude_regex = [".*_templ.go", ".*output.css"]

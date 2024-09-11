@@ -1,18 +1,20 @@
 package components
 
-templ DangerButton(href string) {
-	<a
-		href={ templ.SafeURL(href) }
-		class="text-xs flex gap-1 items-center w-fit px-4 py-2 rounded-sm bg-rose-800 bg-opacity-40 border border-rose-600 hover:border-rose-700 text-rose-50 font-bold cursor-pointer"
-	>
-		{ children... }
-	</a>
+func att(v []templ.Attributes) templ.Attributes {
+	if len(v) > 0 {
+		return v[0]
+	}
+	return templ.Attributes{}
 }
 
-templ TransparentButton(href string) {
+const NEUTRAL = "bg-teal-800 border-teal-600 hover:border-teal-700 dark:text-teal-100 text-teal-900"
+const SUCCESS = "bg-green-800 border-green-600 hover:border-green-700 dark:text-green-100 text-green-900"
+const DANGER = "bg-rose-800 border-rose-600 hover:border-rose-700 dark:text-rose-100 text-rose-900"
+
+templ Button(pallet string, attributes ...templ.Attributes) {
 	<a
-		href={ templ.SafeURL(href) }
-		class="text-xs flex gap-1 items-center w-fit px-4 py-2 rounded-sm bg-teal-800 bg-opacity-40 border border-teal-600 hover:border-teal-700 text-teal-50 font-bold cursor-pointer"
+		{ att(attributes)... }
+		class={ "text-xs flex gap-1 items-center w-fit px-4 py-2 rounded-sm bg-opacity-20 border font-bold cursor-pointer " + pallet }
 	>
 		{ children... }
 	</a>

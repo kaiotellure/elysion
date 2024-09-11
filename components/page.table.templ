@@ -1,0 +1,11 @@
+package components
+
+import "github.com/kaiotellure/lysion/services/table"
+
+templ PageTable(items []*table.TableItem) {
+	for _, v := range items {
+		if v != nil {
+			{ v.ID }
+		}
+	}
+}

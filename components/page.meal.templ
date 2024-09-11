@@ -1,0 +1,81 @@
+package components
+
+import "github.com/kaiotellure/lysion/helpers"
+
+type Meal struct {
+	ID           string
+	Name         string
+	Description  string
+	Image        string
+	AllergyWarns string
+	Price        int
+}
+
+templ RankedMeal(index int, data Meal) {
+	<a href={ templ.SafeURL("/prato/" + data.ID) } class="relative">
+		<div class="bg-gradient-to-r from-black opacity-40 font-sans absolute left-0 top-0 text-[10em] leading-none">
+			{ helpers.Itoa(index+1) }
+		</div>
+		<img class="w-40 aspect-square object-cover" src={ data.Image }/>
+	</a>
+}
+
+templ TimedMeal(index int, data Meal) {
+	<a href={ templ.SafeURL("/prato/" + data.ID) } class="relative w-40 aspect-square group">
+		<div class="group-hover:bg-opacity-60 group-hover:bg-black w-full h-full hidden group-hover:flex items-center justify-center text-sm font-semibold p-2">
+			Uma hora atras
+		</div>
+		<img
+			class="-z-10 absolute left-0 top-0 w-full aspect-square object-cover"
+			src={ data.Image }
+		/>
+	</a>
+}
+
+templ MealOrderButton(action, id string) {
+	@Button(helpers.Tenary(action == "add", SUCCESS, DANGER), templ.Attributes{
+		"hx-post": "/mesa/" + action + "?id=" + id,
+		"hx-swap": "outerHTML",
+	}) {
+		@helpers.Tenary(action == "add", IconSquarePlus(), IconTrash())
+		{ helpers.Tenary(action == "add", "Adicionar à Mesa", "Remover da Mesa") }
+	}
+}
+
+templ PageMeal(data Meal, added bool) {
+	@default_background
+	<div class="w-full flex justify-between gap-4">
+		<div class="flex flex-col">
+			<div class="flex items-center gap-1 p-2 rounded border border-opacity-20 dark:border-yellow-200 border-yellow-600 bg-yellow-800 bg-opacity-10 dark:text-yellow-200 text-yellow-900 text-xs leading-none mb-2">
+				@IconAlert()
+				<b>Alergicos!</b>
+				Contém { helpers.JoinAnd(data.AllergyWarns, ",", ",", "e") }.
+			</div>
+			<span class="font-bold leading-none">{ data.Name }</span>
+			<span class="text-sm opacity-75 mt-1 leading-none mb-2 max-w-[300px]">
+				{ data.Description }
+			</span>
+			<div class="text-xs px-4 mb-2 opacity-60 border-l">
+				<span class="flex items-center gap-1">
+					@IconUsers()
+					Rende até 6 pessoas.
+				</span>
+				<span class="flex items-center gap-1">
+					@IconCirclePlus()
+					Acompanha Refrigerante.
+				</span>
+				<span class="flex items-center gap-1">
+					@IconClock()
+					Apróx. 30 mins para preparar.
+				</span>
+			</div>
+			<div class="flex items-center gap-2">
+				@MealOrderButton(helpers.Tenary(added, "remove", "add"), data.ID)
+				<span class="dark:text-green-400 text-green-900 font-bold text-lg leading-none">
+					R${ helpers.DisplayPrice(data.Price) }
+				</span>
+			</div>
+		</div>
+		<img class="w-40 rounded aspect-square" src={ data.Image }/>
+	</div>
+}
